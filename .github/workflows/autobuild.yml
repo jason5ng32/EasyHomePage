@@ -1,4 +1,4 @@
-name: Deploy Home Page
+name: Deploy Vue App
 
 on:
   push:
@@ -9,11 +9,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 确保 git 历史被完整获取，以便用于版本推送
-          persist-credentials: false  # 不在后续步骤中使用内建的 credentials
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -24,44 +23,24 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: npm run build  # 这会生成 docs 目录
 
-      - name: Commit docs directory
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -f docs
-          git commit -m "Deploy new documentation" -a || echo "No changes to commit"
-
-      - name: Push changes using github-script
-        uses: actions/github-script@v6
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const repo = context.repo;
-            const fs = require('fs');
-            const path = require('path');
+          ref: gh-pages
+          path: gh-pages
 
-            const commitFiles = async (folderPath, base = '') => {
-              const files = fs.readdirSync(folderPath);
+      - name: Copy docs to gh-pages directory
+        run: |
+          rm -rf gh-pages/*
+          cp -r docs/* gh-pages/
 
-              for (const file of files) {
-                const filePath = path.join(folderPath, file);
-                const gitPath = path.join(base, file);
-                if (fs.statSync(filePath).isDirectory()) {
-                  await commitFiles(filePath, gitPath);
-                } else {
-                  const content = fs.readFileSync(filePath, 'base64');
-                  await github.rest.repos.createOrUpdateFileContents({
-                    owner: repo.owner,
-                    repo: repo.repo,
-                    path: gitPath,
-                    message: `Update ${gitPath}`,
-                    content,
-                    branch: 'gh-pages',
-                  });
-                }
-              }
-            };
-
-            await commitFiles('docs');
+      - name: Commit and push to gh-pages
+        working-directory: gh-pages
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add .
+          git commit -m "Update documentation" -a || echo "No changes to commit"
+          git push --force origin gh-pages
