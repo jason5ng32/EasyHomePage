@@ -1,0 +1,33 @@
+{
+  "name": "mycv",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@analytics/google-analytics": "^1.0.7",
+    "@vue/compiler-sfc": "^3.4.27",
+    "analytics": "^0.8.11",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "pinia": "^2.1.7",
+    "scrollreveal": "^4.0.9",
+    "stickybits": "^3.7.11",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.0",
+    "vite-plugin-markdown": "^2.2.0"
+  }
+}
