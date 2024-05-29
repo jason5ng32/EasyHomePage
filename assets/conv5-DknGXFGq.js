@@ -7,11 +7,9 @@ const n={date:"2024-01",avatar:"m3.png"},l=`<p>这个人吧，好奇心还挺强
 <li>10W+ 惯犯</li>
 <li>反互联网审查</li>
 <li>GOOGLE 铁杆粉丝</li>
-<li>小程序砖家</li>
 <li>MAC 使用者</li>
 <li>产品研究者</li>
 <li>爱折腾</li>
-<li>琢磨人性者</li>
 <li>摄影爱好者</li>
 <li>分享者</li>
 <li>GMAIL 爱好者</li>
@@ -31,11 +29,9 @@ const n={date:"2024-01",avatar:"m3.png"},l=`<p>这个人吧，好奇心还挺强
 * 10W+ 惯犯
 * 反互联网审查
 * GOOGLE 铁杆粉丝
-* 小程序砖家
 * MAC 使用者
 * 产品研究者
 * 爱折腾
-* 琢磨人性者
 * 摄影爱好者
 * 分享者
 * GMAIL 爱好者
