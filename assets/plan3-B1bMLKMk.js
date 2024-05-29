@@ -1,0 +1,1 @@
+const t={date:"2024-03",Title:"正经产品咨询",Subtitle:"提供短期或长期的产品咨询服务",Includes:["产品设计咨询","产品运营咨询","增长策略咨询","效率提升咨询","可以帮你加油","可以陪同上厕所","包含前两种服务"],Price:"99 JN$"},e="",c="";export{t as attributes,e as html,c as markdown};
