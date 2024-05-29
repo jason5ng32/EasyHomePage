@@ -3,7 +3,7 @@ name: Deploy Pages
 on:
   push:
     branches:
-      - main # 监听 main 分支的提交
+      - main
 
 jobs:
   build-and-deploy:
