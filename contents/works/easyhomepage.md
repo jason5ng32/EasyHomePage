@@ -5,8 +5,6 @@ url: 'https://github.com/jason5ng32/EasyHomepage'
 tags:
   - Javascript
   - Vue
-  - Bootstrap
-  - Node.js
   - UI Design
 ---
 

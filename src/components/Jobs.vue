@@ -18,7 +18,7 @@
                     </li>
                 </ul>
                 <div class="tab-content jn-tab-content card jn-card mb-5" id="pills-tabContent"
-                :class="[isMobile? 'p-4':'p-5']"
+                :class="[isMobile? 'p-4 jn-jobs-content-mobile':'p-5']"
                 >
                     <div class="tab-pane fade" :class="{ 'show active': activeTab === index }"
                         v-for="(file, index) in markdownFiles" :key="'tab-pane-' + file.attributes.id"
@@ -130,6 +130,9 @@ onMounted(async () => {
     height: 20pt;
     background-color: rgba(17, 214, 128, 0.48);
     border-radius: 50%;
+}
+.jn-jobs-content-mobile {
+    margin: 0 -14pt;
 }
 
 .nav-pills .nav-link.active,
