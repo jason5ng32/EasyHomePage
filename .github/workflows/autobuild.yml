@@ -1,4 +1,4 @@
-name: Deploy Pages 
+name: Deploy Pages
 
 on:
   push:
@@ -31,10 +31,14 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Copy docs to gh-pages directory
+      - name: Prepare gh-pages directory
         run: |
-          rm -rf gh-pages/*
-          cp -r docs/* gh-pages/
+          mkdir -p gh-pages/docs
+          rm -rf gh-pages/docs/*
+      
+      - name: Copy docs to gh-pages/docs directory
+        run: |
+          cp -r docs/* gh-pages/docs/
 
       - name: Commit and push to gh-pages
         working-directory: gh-pages
