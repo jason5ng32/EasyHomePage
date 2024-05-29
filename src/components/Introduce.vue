@@ -12,7 +12,7 @@
                 <div class="text-dark mb-4 jn-introduce-doc">
                     <div v-html="formattedHtml" class="mb-4"></div>
                 
-                <a class="btn-purple" href="#About">{{ attributes.button }} &nbsp;<i
+                <a class="btn-purple" href="#Conversations">{{ attributes.button }} &nbsp;<i
                         class="bi bi-arrow-down-circle"></i></a>
                     </div>
             </div>
