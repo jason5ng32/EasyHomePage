@@ -31,14 +31,13 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Prepare gh-pages directory
+      - name: Clear old documentation
+        working-directory: gh-pages
         run: |
-          mkdir -p gh-pages/docs
-          rm -rf gh-pages/docs/*
-      
-      - name: Copy docs to gh-pages/docs directory
-        run: |
-          cp -r docs/* gh-pages/docs/
+          find . -maxdepth 1 ! -name 'CNAME' ! -name '.git' ! -name '.' ! -name '..' -exec rm -rf {} +
+
+      - name: Copy docs to gh-pages directory
+        run: cp -r docs/* gh-pages/
 
       - name: Commit and push to gh-pages
         working-directory: gh-pages
