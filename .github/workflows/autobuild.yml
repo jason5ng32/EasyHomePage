@@ -1,4 +1,4 @@
-name: Deploy Pages 
+name: Deploy Pages
 
 on:
   push:
@@ -31,10 +31,9 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Copy docs to gh-pages directory
+      - name: Synchronize docs directory
         run: |
-          rm -rf gh-pages/*
-          cp -r docs/* gh-pages/
+          rsync -r --delete docs/ gh-pages/
 
       - name: Commit and push to gh-pages
         working-directory: gh-pages
@@ -43,4 +42,4 @@ jobs:
           git config user.name "GitHub Action"
           git add .
           git commit -m "Update documentation" -a || echo "No changes to commit"
-          git push --force origin gh-pages
+          git push origin gh-pages
