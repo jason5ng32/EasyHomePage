@@ -1,4 +1,4 @@
-name: Deploy Vue App
+name: Deploy Home Page
 
 on:
   push:
@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # 确保 git 历史被完整获取，以便用于版本推送
+          persist-credentials: false  # 不在后续步骤中使用内建的 credentials
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -32,9 +33,35 @@ jobs:
           git add -f docs
           git commit -m "Deploy new documentation" -a || echo "No changes to commit"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Push changes using github-script
+        uses: actions/github-script@v6
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages # 推送到 gh-pages 分支
-          force: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repo = context.repo;
+            const fs = require('fs');
+            const path = require('path');
+
+            const commitFiles = async (folderPath, base = '') => {
+              const files = fs.readdirSync(folderPath);
+
+              for (const file of files) {
+                const filePath = path.join(folderPath, file);
+                const gitPath = path.join(base, file);
+                if (fs.statSync(filePath).isDirectory()) {
+                  await commitFiles(filePath, gitPath);
+                } else {
+                  const content = fs.readFileSync(filePath, 'base64');
+                  await github.rest.repos.createOrUpdateFileContents({
+                    owner: repo.owner,
+                    repo: repo.repo,
+                    path: gitPath,
+                    message: `Update ${gitPath}`,
+                    content,
+                    branch: 'gh-pages',
+                  });
+                }
+              }
+            };
+
+            await commitFiles('docs');
