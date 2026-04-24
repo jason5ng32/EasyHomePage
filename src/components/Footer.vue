@@ -12,7 +12,7 @@
                     <p class="mt-4 max-w-3xl leading-8 text-muted-foreground">{{ attributes.ContactSubtitle }}</p>
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a
-                            v-for="item in attributes.Social"
+                            v-for="item in socialLinks"
                             :key="item.name"
                             class="inline-flex size-11 items-center justify-center rounded-full border bg-background text-foreground transition hover:bg-foreground hover:text-background"
                             :href="item.url"
@@ -39,7 +39,8 @@ import {
     RssIcon,
     TwitterIcon,
 } from 'lucide-vue-next';
-import { attributes } from '/contents/footer.md';
+import { siteConfig } from '@/content/site';
+import { attributes } from '/site/sections/footer.md';
 
 const socialIconMap = {
     github: GithubIcon,
@@ -52,4 +53,5 @@ const socialIconMap = {
 };
 
 const getSocialIcon = (icon) => socialIconMap[icon] || GlobeIcon;
+const socialLinks = siteConfig.socialLinks || [];
 </script>

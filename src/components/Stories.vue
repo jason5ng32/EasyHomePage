@@ -51,7 +51,7 @@
 import { computed } from 'vue';
 import MarkdownIt from 'markdown-it';
 import { Badge } from '@/components/ui/badge';
-import { attributes } from '/contents/stories.md';
+import { attributes } from '/site/sections/stories.md';
 
 const markdown = new MarkdownIt({
     breaks: true,

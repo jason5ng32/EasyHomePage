@@ -25,3 +25,4 @@ dist-ssr
 docs
 local
 package-lock.json
+project-docs/*

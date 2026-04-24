@@ -43,7 +43,7 @@ import { computed } from 'vue';
 import { ExternalLinkIcon } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { renderContent } from '@/lib/markdown';
-import { attributes } from '/contents/works.md';
+import { attributes } from '/site/sections/works.md';
 
 const works = computed(() => {
     return [...(attributes.items || [])]

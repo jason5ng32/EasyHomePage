@@ -73,9 +73,9 @@ import { ExternalLinkIcon } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { renderContent } from '@/lib/markdown';
-import { attributes } from '/contents/products.md';
+import { attributes } from '/site/sections/products.md';
 
-const imageModules = import.meta.glob('/contents/products/images/*', { eager: true });
+const imageModules = import.meta.glob('/site/assets/products/*', { eager: true });
 
 const resolveCover = (cover) => {
     const imagePathKey = Object.keys(imageModules).find((key) => key.endsWith(`/${cover}`));

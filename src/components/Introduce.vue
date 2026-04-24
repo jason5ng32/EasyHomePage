@@ -17,7 +17,7 @@
 
             <div class="relative hidden min-h-[560px] md:-mb-28 md:block md:self-end">
                 <div class="absolute inset-x-6 bottom-0 h-[480px] rounded-t-full bg-foreground"></div>
-                <div class="jn-introduce-bg absolute inset-0 bg-contain bg-bottom bg-no-repeat"></div>
+                <div class="absolute inset-0 bg-contain bg-bottom bg-no-repeat" :style="avatarStyle"></div>
                 <div class="absolute bottom-8 left-0 rounded-2xl border bg-intro-floating p-4 shadow-xl backdrop-blur">
                     <div class="text-4xl font-black">{{ attributes.heroStatValue }}</div>
                     <div class="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">{{ attributes.heroStatLabel }}</div>
@@ -45,10 +45,14 @@
 import { ref } from 'vue';
 import { ChevronDownIcon } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
-import { html } from '/contents/introduce.md';
-import { attributes } from '/contents/introduce.md';
+import { resolveContentAsset, siteConfig } from '@/content/site';
+import { html } from '/site/sections/introduce.md';
+import { attributes } from '/site/sections/introduce.md';
 
 const formattedHtml = ref('');
+const avatarStyle = {
+    backgroundImage: `url('${resolveContentAsset(siteConfig.brand.avatar)}')`,
+};
 const formatHtml = (content) => {
     return content.toString()
         .replace(/<li>/g, '<p class="content-check">')
@@ -58,9 +62,3 @@ const formatHtml = (content) => {
 };
 formattedHtml.value = formatHtml(html);
 </script>
-
-<style scoped>
-.jn-introduce-bg {
-    background-image: url('/contents/memoji.png');
-}
-</style>

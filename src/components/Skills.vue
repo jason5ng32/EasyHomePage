@@ -59,7 +59,7 @@ import {
 } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { renderContent } from '@/lib/markdown';
-import { attributes } from '/contents/skills.md';
+import { attributes } from '/site/sections/skills.md';
 
 const iconMap = {
     chart: BarChart3Icon,

@@ -1,11 +1,10 @@
-const THEMES = new Set(['graphite', 'violet', 'ocean', 'forest', 'rose']);
+import { siteConfig, themePresets } from '@/content/site';
+
+const THEMES = new Set(themePresets);
 
 const getTheme = () => {
-  const params = new URLSearchParams(window.location.search);
-  const queryValue = params.get('theme');
-
-  if (queryValue && THEMES.has(queryValue)) {
-    return queryValue;
+  if (THEMES.has(siteConfig.theme.preset)) {
+    return siteConfig.theme.preset;
   }
 
   return 'graphite';

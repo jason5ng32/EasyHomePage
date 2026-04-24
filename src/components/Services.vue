@@ -71,7 +71,7 @@ import { toast } from 'vue-sonner';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { attributes } from '/contents/services.md';
+import { attributes } from '/site/sections/services.md';
 
 const services = computed(() => {
     return [...(attributes.items || [])]

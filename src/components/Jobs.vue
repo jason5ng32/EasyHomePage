@@ -47,7 +47,7 @@
 import { computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { renderContent } from '@/lib/markdown';
-import { attributes } from '/contents/jobs.md';
+import { attributes } from '/site/sections/jobs.md';
 
 const formattedDescription = computed(() => {
     return renderContent(attributes.Description || '', 'content-dot ml-4 mt-2 text-muted-foreground');
