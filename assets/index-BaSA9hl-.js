@@ -68,7 +68,7 @@ import{d as De,t as Ne,c as Ee,o as a,a as b,w as f,b as p,u as n,X as He,e as s
 - 2010 GFW：被墙认证大奖
 - 2010 德国之声：年度最佳中文博客
 - 2009 搜狐：IT 新闻奖
-`}]},ve={badge:"代表产品",title:"创·造",featuredLabel:"最新",openLabel:"打开产品",items:[{date:"2026",title:"Beavern",cover:"beavern.jpg",url:"https://beavern.app/",tags:["理财","垂直领域","Vibe Coding"],content:`Beavern 必稳是一个面向多资产理财人士的资产记录与投资分析工具。解决中产人士在进行多资产投资的时候，由于标的数量多、平台多、类型多而不同、币种不同、汇率更新不及时等导致的分析、统计、跟踪等事务上的困难。
+`}]},ve={badge:"代表产品",title:"创·造",featuredLabel:"最新",openLabel:"打开产品",items:[{date:"2026",title:"Beavern",cover:"beavern.jpg",url:"https://beavern.com/",tags:["理财","垂直领域","Vibe Coding"],content:`Beavern 必稳是一个面向多资产理财人士的资产记录与投资分析工具。解决中产人士在进行多资产投资的时候，由于标的数量多、平台多、类型多而不同、币种不同、汇率更新不及时等导致的分析、统计、跟踪等事务上的困难。
 
 借助于良好的产品体验和 AI 辅助的分析工具，Beavern 可以帮助用户从此告别混乱的资产管理方式，在 Beavern 中一目了然，从容不迫。
 `},{date:"2026",title:"WikiMatch",cover:"wikimatch.jpg",url:"https://wikimatch.app/",tags:["游戏","知识学习","Vibe Coding"],content:`一款基于 Wikipedia 的多人知识竞技游戏。给定相同的目标词条和相同的随机起始词条，每个人只能通过点击词条页面的链接前进，并最终到达目标词条。先到达目标词条者获胜。
