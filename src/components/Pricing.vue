@@ -1,85 +1,70 @@
 <template>
-    <div class="jn-pricing mt-5 position-relative" id="Pricing">
-        <span class="badge bg-purple jn-badge ">{{ attributes.Badge }}</span>
-
-        <div class="row mt-5 mx-0 jn-pricing-row px-4" v-if="loaded">
-            <div v-for="(file,index) in markdownFiles" :key="file" class="col-mb-4 col-xl-4 col-xxl-4 col-12 mb-5">
-                <div class="card jn-card mb-4 position-relative jn-animate-card">
-                    <div class="jn-plan-title" :class="{'bg-primary': index % 3 === 0,
-                    'bg-success': index % 3 === 1,
-                    'bg-purple': index % 3 === 2}">
-                        <h5 class="card-title">{{ file.attributes.Title}}</h5>
-                        <h6 class="card-subtitle mb-2 mb-4 opacity-50">{{ file.attributes.Subtitle}}</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="jn-plan-detail">
-                            <ul class="list-group list-group-flush">
-                                <li v-for="includes in file.attributes.Includes" class="list-group-item border-0">
-                                    <i class="bi bi-check-circle-fill text-success"></i>
-                                    {{ includes }}
-                                </li>
-
-                                <li v-for="excludes in file.attributes.Excludes" class="list-group-item border-0">
-                                    <i class="bi bi-x-circle-fill text-danger"></i>
-                                    {{ excludes }}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="jn-plan-buy row m-3">
-                            <button class="btn" @click="showToast" :class="{'btn-primary': index % 3 === 0,
-                            'btn-success': index % 3 === 1,
-                            'btn-purple': index % 3 === 2}">{{ file.attributes.Price}}</button>
-                        </div>
-                    </div>
+    <section class="section-block bg-[var(--panel)] text-[var(--panel-foreground)]" id="Pricing">
+        <div class="site-frame">
+            <div class="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <Badge class="section-label h-auto border-white/15 bg-white/10 text-white/70">{{ attributes.Badge }}</Badge>
+                    <h2 class="section-heading text-[var(--panel-foreground)]">有些邀请，可以从这里开始。</h2>
                 </div>
+                <p class="section-lead text-white/62">
+                    不一定正经，但每一项都可以成为一次见面、一次聊天，或者一次合作的理由。
+                </p>
             </div>
 
+            <div class="grid gap-4 lg:grid-cols-3" v-if="loaded">
+                <article
+                    v-for="(file,index) in markdownFiles"
+                    :key="file.attributes.Title"
+                    :class="[
+                        'reveal-up flex min-h-[520px] flex-col rounded-[2rem] border border-white/10 p-6',
+                        index === 1 ? 'bg-accent text-accent-foreground' : 'bg-white/[0.06] text-white'
+                    ]"
+                >
+                    <div>
+                        <div class="text-xs font-black uppercase tracking-[0.18em] opacity-60">Plan {{ index + 1 }}</div>
+                        <h3 class="mt-5 text-4xl font-black leading-none">{{ file.attributes.Title }}</h3>
+                        <p class="mt-4 text-sm leading-7 opacity-70">{{ file.attributes.Subtitle }}</p>
+                    </div>
+                    <ul class="mt-8 flex flex-col gap-3">
+                        <li v-for="item in file.attributes.Includes" :key="item" class="flex gap-3 text-sm">
+                            <CheckCircleIcon class="mt-0.5 size-4 shrink-0" />
+                            <span>{{ item }}</span>
+                        </li>
+                        <li v-for="item in file.attributes.Excludes" :key="item" class="flex gap-3 text-sm opacity-55">
+                            <XCircleIcon class="mt-0.5 size-4 shrink-0" />
+                            <span>{{ item }}</span>
+                        </li>
+                    </ul>
+                    <Button
+                        class="mt-8 w-full rounded-full"
+                        :variant="index === 1 ? 'outline' : 'secondary'"
+                        @click="showToast"
+                    >
+                        {{ file.attributes.Price }}
+                    </Button>
+                </article>
+            </div>
         </div>
-    </div>
-
-    <div class="toast-container  p-3 jn-toast">
-        <div id="toastInfoMask" class="toast" role="alert" ref="toastEl" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto" :class="alert.alertStyle">{{ alert.alertTitle }}</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                {{ alert.alertMessage }}
-            </div>
-        </div>
-    </div>
-
+    </section>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
-import { Toast } from 'bootstrap';
-
-// 导入主介绍内容
+import { toast } from 'vue-sonner';
+import { CheckCircleIcon, XCircleIcon } from 'lucide-vue-next';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { attributes } from '/contents/pricing/index.md';
 
 const loaded = ref(false);
-const alert = ref({});
-const toastEl = ref(null);
 
-// 显示 Toast
-const showToast = (duration = 2000) => {
-    alert.value = {
-        alertTitle: attributes.alertTitle,
-        alertMessage: attributes.alertMessage,
-        alertStyle: "text-success"
-    };
-    if (toastEl.value) {
-        const toastInfoMask = new Toast(toastEl.value, {
-            delay: 2000,
-        });
-        toastInfoMask.show();
-    } else {
-        console.error("Toast element not found");
-    }
+const showToast = () => {
+    toast.success(attributes.alertTitle, {
+        description: attributes.alertMessage,
+        duration: 2000,
+    });
 }
 
-// 导入 .md 文件
 const markdownContext = import.meta.glob('/contents/pricing/!(index).md');
 const markdownFiles = reactive([]);
 const getFiles = async () => {
@@ -90,7 +75,6 @@ const getFiles = async () => {
         }))
     );
     markdownFiles.push(...(await Promise.all(importPromises)));
-    // 按照 data 降序排列
     markdownFiles.sort((a, b) => {
         return a.attributes.date < b.attributes.date ? 1 : -1;
     });
@@ -98,68 +82,7 @@ const getFiles = async () => {
     loaded.value = true;
 };
 
-const formatHtml = (content, icon) => {
-    return content.toString()
-        .replace(/<li>/g, `<p><i class="bi text-purple ${icon}"></i> `)
-        .replace(/<\/li>/g, '</p>')
-        .replace(/<ul>/g, '')
-        .replace(/<\/ul>/g, '');
-};
-
-const adjustButtonPosition = () => {
-    const screenWidth = window.innerWidth;
-    const contentWidth = 1600; // 主内容区域的宽度
-    const spaceOnRight = (screenWidth - contentWidth) / 2;
-
-    const button = document.querySelector('.jn-toast');
-    if (screenWidth > 1600) { // 只在屏幕宽度大于1600px时调整
-        button.style.right = `${spaceOnRight + 0}px`; // 保持20px的距离
-    } else {
-        button.style.right = '0'; // 在小屏幕上使用默认位置
-    }
-}
-
-onMounted(() => {
-    window.addEventListener('resize', adjustButtonPosition);
-    adjustButtonPosition();
-});
-
 onMounted(async () => {
     await getFiles();
 })
-
 </script>
-
-<style scoped>
-.jn-toast {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    right: 0;
-    margin-bottom: 2pt;
-    margin-right: 2pt;
-    max-width: 80vw;
-}
-
-.jn-pricing {
-    background-color: rgba(195, 105, 244, 0.08);
-}
-
-.jn-h2 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-}
-
-.jn-tags {
-    width: fit-content;
-}
-
-.jn-plan-title {
-    padding: 1rem;
-    color: white;
-    position: relative;
-    border-radius: 10pt;
-    margin: -1pt -5pt 0 -5pt;
-    box-shadow: 0 0 10pt #0000005c;
-}
-</style>

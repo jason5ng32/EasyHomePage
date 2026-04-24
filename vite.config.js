@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import dotenv, { parse } from 'dotenv';
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue'
 import path from "path"
 import { plugin as mdPlugin } from 'vite-plugin-markdown';
@@ -28,6 +29,7 @@ export default defineConfig({
   base: './',
   plugins: [
     vue(),
+    tailwindcss(),
     mdPlugin(markdownOptions)
   ],
   resolve: {

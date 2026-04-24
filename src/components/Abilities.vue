@@ -1,56 +1,69 @@
 <template>
-    <div class="jn-abilities mt-5 position-relative" id="Abilities">
-        <span class="badge bg-success jn-badge">{{ attributes.Badge }}</span>
+    <section class="section-block bg-[var(--panel)] text-[var(--panel-foreground)]" id="Abilities">
+        <div class="site-frame">
+            <div class="grid gap-10 lg:grid-cols-[0.72fr_1.28fr]">
+                <div class="reveal-left">
+                    <Badge class="section-label h-auto border-white/15 bg-white/10 text-white/70">{{ attributes.Badge }}</Badge>
+                    <h2 class="section-heading text-[var(--panel-foreground)]">{{ attributes.Title }}</h2>
+                    <div v-html="formattedHtml" class="mt-8 max-w-xl text-sm leading-8 text-white/65"></div>
+                </div>
 
-        <div class="row justify-content-evenly mt-5 mx-0">
-            <div class="jn-left-panel mb-4 col-md-5 col-12">
-                <h2 class="jn-h2">
-                    {{ attributes.Title }}
-                </h2>
-                <div v-html="formattedHtml"></div>
-            </div>
-
-            <div v-if="loaded" class="jn-right-panel col-md-7 col-12">
-                <div v-for="i in Math.ceil(markdownFiles.length / 2)" :key="i" class="row ">
-                    <div v-for="j in 2" :key="j" class="col-md-6 col-12 mb-5">
-                        <div class="card jn-card jn-abilities-card h-100 jn-animate-card">
-                            <div class="card-body" v-if="markdownFiles[(i-1) * 2 + (j-1)]">
-                                <div class="jn-icon">
-                                    <i class="bi" :class="markdownFiles[(i-1) * 2 + (j-1)].attributes.icon"></i>
-                                </div>
-                                <h5 class="card-title">{{ markdownFiles[(i-1) * 2 + (j-1)].attributes.Title }}</h5>
-                                <div v-html="markdownFiles[(i-1) * 2 + (j-1)].html" class="jn-card-text"></div>
+                <div v-if="loaded" class="grid gap-4 md:grid-cols-2">
+                    <article
+                        v-for="(file, index) in markdownFiles"
+                        :key="file.attributes.Title"
+                        class="reveal-up group rounded-3xl border border-white/10 bg-white/[0.06] p-6 transition hover:-translate-y-1 hover:bg-white/[0.09]"
+                    >
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex size-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
+                                <component :is="getAbilityIcon(file.attributes.icon)" class="size-7" />
+                            </div>
+                            <div class="text-5xl font-black leading-none text-white/10">
+                                {{ String(index + 1).padStart(2, '0') }}
                             </div>
                         </div>
-                    </div>
-
+                        <h3 class="mt-10 text-2xl font-black">{{ file.attributes.Title }}</h3>
+                        <div v-html="file.html" class="mt-4 text-sm leading-7 text-white/62"></div>
+                    </article>
                 </div>
             </div>
         </div>
-    </div>
-
+    </section>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
-
-// 导入主介绍内容
+import {
+    BarChart3Icon,
+    LayoutGridIcon,
+    StoreIcon,
+    UsersIcon,
+    SparklesIcon,
+} from 'lucide-vue-next';
+import { Badge } from '@/components/ui/badge';
 import { attributes, html } from '/contents/abilities/index.md';
 
 const loaded = ref(false);
 
+const iconMap = {
+    'bi-columns-gap': LayoutGridIcon,
+    'bi-shop': StoreIcon,
+    'bi-people': UsersIcon,
+    'bi-bar-chart': BarChart3Icon,
+};
+
+const getAbilityIcon = (iconName) => iconMap[iconName] || SparklesIcon;
+
 const formattedHtml = ref('');
 const formatHtml = (content) => {
     return content.toString()
-        .replace(/<li>/g, `<p><i class="bi bi-emoji-wink-fill text-success"></i> `)
+        .replace(/<li>/g, '<p class="content-dot">')
         .replace(/<\/li>/g, '</p>')
         .replace(/<ul>/g, '')
         .replace(/<\/ul>/g, '');
 };
 formattedHtml.value = formatHtml(html);
 
-
-// 导入 .md 文件
 const markdownContext = import.meta.glob('/contents/abilities/!(index).md');
 const markdownFiles = reactive([]);
 const getFiles = async () => {
@@ -61,7 +74,6 @@ const getFiles = async () => {
         }))
     );
     markdownFiles.push(...(await Promise.all(importPromises)));
-    // 按照 data 降序排列
     markdownFiles.sort((a, b) => {
         return a.attributes.date < b.attributes.date ? 1 : -1;
     });
@@ -72,23 +84,4 @@ const getFiles = async () => {
 onMounted(async () => {
     await getFiles();
 })
-
 </script>
-
-<style scoped>
-.jn-abilities {
-    background-color: rgba(58, 232, 179, 0.08);
-}
-
-.jn-h2 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-}
-
-.jn-fit {
-    width: fit-content;
-    padding: 0.5rem 1rem;
-    border: 2px solid var(--bs-dark);
-}
-
-</style>

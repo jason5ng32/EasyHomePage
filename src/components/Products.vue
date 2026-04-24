@@ -1,91 +1,102 @@
 <template>
-    <div class="jn-products mt-5 position-relative" id="Products">
-        <span class="badge bg-dark jn-badge ">{{ attributes.Badge }}</span>
-
-        <div class="row justify-content-evenly mt-5 mx-0">
-            <div class="jn-left-panel mb-4 col-md-5 col-12">
-                <div class="sticky-wrapper">
-                    <h2 class="jn-h2">
-                        {{ attributes.Title }}
-                    </h2>
-                    <div v-html="formattedHtml"></div>
+    <section class="section-block bg-[var(--hero)]" id="Products">
+        <div class="site-frame">
+            <div class="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <Badge variant="outline" class="section-label h-auto">{{ attributes.Badge }}</Badge>
+                    <h2 class="section-heading">{{ attributes.Title }}</h2>
                 </div>
+                <div v-html="formattedHtml" class="section-lead"></div>
             </div>
 
-            <div v-if="loaded" class="jn-right-panel col-md-7 col-12">
-                <div v-for="(file,index) in markdownFiles" :key="file" class="row justify-content-between ">
-                    <div class="col-12 mb-5 jn-product-card">
-                        <div class="card jn-card ">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    {{ file.attributes.title }}
-                                    <a class="text-decoration-none link-dark" :href="file.attributes.url"
-                                        target="_blank" rel="noopener noreferrer">
-                                        <i class="bi bi-arrow-up-right-circle"></i>
-                                    </a>
-                                </h5>
-                                <div class="card-title mt-3">
-                                    <span v-for="tags in file.attributes.tags" :key="index"
-                                        class="badge bg-dark jn-tags me-2">
-                                        {{ tags }}
-                                    </span>
-                                </div>
-                                <div class="row my-3 align-items-start">
-                                    <div v-html="file.html" class="jn-card-text col-md-8 col-12 jn-products-text"></div>
-                                    <div class="col-md-4 col-12 pb-2">
-                                        <div class="jn-cover-img">
-                                            <img :src="file.attributes.cover" class="img-fluid"
-                                                :alt="file.attributes.title">
-                                        </div>
-                                    </div>
-
-                                </div>
+            <div v-if="loaded" class="grid gap-5 lg:grid-cols-3">
+                <article v-if="featuredProduct" class="reveal-up overflow-visible rounded-[2rem] border bg-card p-4 elevated lg:col-span-3 lg:p-6">
+                    <div class="grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
+                        <div class="p-3 md:p-4">
+                            <Badge class="h-auto rounded-full bg-accent text-accent-foreground">Featured</Badge>
+                            <h3 class="mt-8 text-5xl font-black leading-none tracking-normal md:text-6xl">
+                                {{ featuredProduct.attributes.title }}
+                            </h3>
+                            <div class="mt-5 flex flex-wrap gap-2">
+                                <Badge v-for="tag in featuredProduct.attributes.tags" :key="tag" variant="secondary">
+                                    {{ tag }}
+                                </Badge>
                             </div>
+                            <div v-html="featuredProduct.html" class="mt-8 content-copy"></div>
+                            <Button as="a" :href="featuredProduct.attributes.url" target="_blank" rel="noopener noreferrer" class="mt-8 w-fit rounded-full">
+                                打开产品
+                                <ExternalLinkIcon data-icon="inline-end" />
+                            </Button>
+                        </div>
+                        <div class="media-frame aspect-[16/10] rounded-[1.5rem] border lg:translate-x-6 lg:translate-y-6 lg:-rotate-1 lg:shadow-2xl">
+                            <img :src="featuredProduct.attributes.cover" :alt="featuredProduct.attributes.title">
                         </div>
                     </div>
+                </article>
 
-                </div>
+                <article
+                    v-for="file in restProducts"
+                    :key="file.attributes.title"
+                    class="reveal-up group overflow-hidden rounded-[1.5rem] border bg-card elevated"
+                >
+                    <div class="media-frame aspect-[16/10]">
+                        <img :src="file.attributes.cover" class="transition duration-500 group-hover:scale-105" :alt="file.attributes.title">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-start justify-between gap-4">
+                            <h3 class="text-xl font-black">{{ file.attributes.title }}</h3>
+                            <a
+                                class="rounded-full border p-2 text-muted-foreground transition hover:bg-foreground hover:text-background"
+                                :href="file.attributes.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                :aria-label="`Open ${file.attributes.title}`"
+                            >
+                                <ExternalLinkIcon class="size-4" />
+                            </a>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <Badge v-for="tag in file.attributes.tags" :key="tag" variant="secondary">
+                                {{ tag }}
+                            </Badge>
+                        </div>
+                        <div v-html="file.html" class="mt-5 line-clamp-4 text-sm leading-7 text-muted-foreground"></div>
+                    </div>
+                </article>
             </div>
         </div>
-    </div>
-
+    </section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, reactive } from 'vue';
-import { useMainStore } from '@/store';
-import stickybits from 'stickybits';
-
-// 导入主介绍内容
+import { ExternalLinkIcon } from 'lucide-vue-next';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { attributes, html } from '/contents/products/index.md';
-
-const store = useMainStore();
-const isMobile = computed(() => store.isMobile);
 
 const loaded = ref(false);
 
 const formattedHtml = ref('');
 const formatHtml = (content) => {
     return content.toString()
-        .replace(/<li>/g, `<p><i class="bi bi-emoji-wink-fill text-success"></i> `)
+        .replace(/<li>/g, '<p class="content-dot">')
         .replace(/<\/li>/g, '</p>')
         .replace(/<ul>/g, '')
         .replace(/<\/ul>/g, '');
 };
 formattedHtml.value = formatHtml(html);
 
-
-// 导入 .md 文件
 const markdownContext = import.meta.glob('/contents/products/!(index).md');
 const imageModules = import.meta.glob('/contents/products/images/*', { eager: true });
 const markdownFiles = reactive([]);
+const featuredProduct = computed(() => markdownFiles[0]);
+const restProducts = computed(() => markdownFiles.slice(1));
 
 const getFiles = async () => {
     const importPromises = Object.values(markdownContext).map(async (loadMarkdown) => {
         const module = await loadMarkdown();
         const attributes = module.attributes;
-
-        // 使用图片文件名来获取正确的导入路径
         const imagePathKey = Object.keys(imageModules).find(key => key.includes(attributes.cover));
         const imageUrl = imagePathKey ? imageModules[imagePathKey].default : null;
 
@@ -99,41 +110,11 @@ const getFiles = async () => {
     });
 
     markdownFiles.push(...(await Promise.all(importPromises)));
-    // 按照 data 降序排列
     markdownFiles.sort((a, b) => b.attributes.date - a.attributes.date);
-
     loaded.value = true;
 };
 
 onMounted(async () => {
     await getFiles();
-    if (!isMobile.value) {
-        stickybits('.sticky-wrapper', {
-            stickyBitStickyOffset: 100,
-        });
-    }
 })
-
 </script>
-
-<style scoped>
-
-.jn-h2 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-}
-
-.jn-tags {
-    width: fit-content;
-}
-
-.jn-cover-img {
-    border-radius: 4pt;
-    position: relative;
-    overflow: hidden;
-}
-
-.jn-product-card {
-    position: relative;
-}
-</style>

@@ -1,14 +1,16 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia';
 import { useMainStore } from './store';
-import 'bootstrap';
+import { applyThemePreferences } from './theme';
 import './style.css'
+import 'vue-sonner/style.css'
 import App from './App.vue'
 
 import Analytics from 'analytics';
 import googleAnalytics from '@analytics/google-analytics';
 
 // 创建 Vue 实例
+applyThemePreferences();
 const app = createApp(App);
 const pinia = createPinia();
 

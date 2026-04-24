@@ -1,66 +1,55 @@
 <template>
-    <div class="jn-footer mt-5 position-relative" id="Footer">
-        <div class="row p-5 w-100">
-            <div class="col-md-6 col-lg-6 col-12">
-                <h1>{{attributes.Title}}</h1>
-                <p class="opacity-75">{{attributes.Subtitle}}</p>
-            </div>
-            <div class="col-md-6 col-lg-6 col-12">
-                <h3>{{attributes.ContactTitle}}</h3>
-                <p class="opacity-75">{{attributes.ContactSubtitle}}</p>
-                <div class="flex">
-                    <a v-for=" (item, index) in attributes.Social" :key="index"
-                        :class="[isMobile ? 'jn-footer-social-mobile me-3' : 'jn-footer-social-desktop me-4']" :href="item.url"
-                        :title="item.name" target="_blank">
-                        <i class="bi" :class="'bi-' + item.icon"></i>
-                    </a>
+    <footer class="bg-background py-10" id="Footer">
+        <div class="site-frame">
+            <div class="grid gap-6 rounded-[2rem] border bg-card p-6 elevated lg:grid-cols-[0.85fr_1.15fr] lg:p-10">
+                <div>
+                    <div class="text-xs font-black uppercase tracking-[0.18em] text-muted-foreground">Contact</div>
+                    <h2 class="mt-4 text-5xl font-black tracking-normal">{{ attributes.Title }}</h2>
+                    <p class="mt-4 max-w-xl text-muted-foreground">{{ attributes.Subtitle }}</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black">{{ attributes.ContactTitle }}</h3>
+                    <p class="mt-4 max-w-3xl leading-8 text-muted-foreground">{{ attributes.ContactSubtitle }}</p>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <a
+                            v-for="item in attributes.Social"
+                            :key="item.name"
+                            class="inline-flex size-11 items-center justify-center rounded-full border bg-background text-foreground transition hover:bg-foreground hover:text-background"
+                            :href="item.url"
+                            :title="item.name"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <component :is="getSocialIcon(item.icon)" class="size-5" />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="jn-footer-placeholder">
-            {{ attributes.Title }}
-            &copy;
-            {{year}}
-        </div>
-    </div>
-
+    </footer>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useMainStore } from '@/store';
-const store = useMainStore();
-const isMobile = computed(() => store.isMobile);
-
-// 导入主介绍内容
+import {
+    GithubIcon,
+    GlobeIcon,
+    InstagramIcon,
+    LinkedinIcon,
+    MailIcon,
+    RssIcon,
+    TwitterIcon,
+} from 'lucide-vue-next';
 import { attributes } from '/contents/footer.md';
 
-const year = new Date().getFullYear();
+const socialIconMap = {
+    github: GithubIcon,
+    twitter: TwitterIcon,
+    linkedin: LinkedinIcon,
+    envelope: MailIcon,
+    instagram: InstagramIcon,
+    rss: RssIcon,
+    wikipedia: GlobeIcon,
+};
 
+const getSocialIcon = (icon) => socialIconMap[icon] || GlobeIcon;
 </script>
-
-<style scoped>
-.jn-footer {
-    background-color: rgb(249, 249, 252);
-}
-
-.jn-footer-social-desktop {
-    font-size: 1.7rem;
-    color: var(--purple);
-}
-
-.jn-footer-social-mobile {
-    font-size: 1rem;
-    color: var(--purple);
-}
-
-.jn-footer-placeholder {
-    background-color: var(--purple);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40pt;
-    font-weight: bold;
-}
-</style>
