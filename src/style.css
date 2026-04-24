@@ -27,6 +27,27 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-hero: var(--hero);
+  --color-panel: var(--panel);
+  --color-panel-foreground: var(--panel-foreground);
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-subtle: var(--panel-subtle);
+  --color-panel-card: var(--panel-card);
+  --color-panel-card-hover: var(--panel-card-hover);
+  --color-panel-border: var(--panel-border);
+  --color-panel-border-strong: var(--panel-border-strong);
+  --color-panel-label: var(--panel-label);
+  --color-panel-label-border: var(--panel-label-border);
+  --color-panel-track: var(--panel-track);
+  --color-panel-tag: var(--panel-tag);
+  --color-panel-tag-foreground: var(--panel-tag-foreground);
+  --color-section-label: var(--section-label);
+  --color-section-label-border: var(--section-label-border);
+  --color-story-quote: var(--story-quote);
+  --color-story-tag: var(--story-tag);
+  --color-intro-copy: var(--intro-copy);
+  --color-intro-floating: var(--intro-floating);
+  --color-intro-action: var(--intro-action);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -225,6 +246,33 @@
   --stripe: #ff8cb6;
 }
 
+:root {
+  --section-label: color-mix(in srgb, var(--background) 70%, transparent);
+  --section-label-border: color-mix(in srgb, var(--foreground) 15%, transparent);
+  --panel-muted: color-mix(in srgb, var(--panel-foreground) 65%, transparent);
+  --panel-subtle: color-mix(in srgb, var(--panel-foreground) 38%, transparent);
+  --panel-card: color-mix(in srgb, var(--panel-foreground) 6%, transparent);
+  --panel-card-hover: color-mix(in srgb, var(--panel-foreground) 9%, transparent);
+  --panel-border: color-mix(in srgb, var(--panel-foreground) 10%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--panel-foreground) 18%, transparent);
+  --panel-label: color-mix(in srgb, var(--panel-foreground) 10%, transparent);
+  --panel-label-border: color-mix(in srgb, var(--panel-foreground) 15%, transparent);
+  --panel-track: color-mix(in srgb, var(--panel-foreground) 10%, transparent);
+  --panel-tag: color-mix(in srgb, var(--panel-foreground) 6%, transparent);
+  --panel-tag-foreground: color-mix(in srgb, var(--panel-foreground) 58%, transparent);
+  --panel-glow: color-mix(in srgb, var(--accent) 16%, transparent);
+  --panel-sheen: color-mix(in srgb, var(--panel-foreground) 7%, transparent);
+  --panel-card-shadow: inset 0 1px 0 color-mix(in srgb, var(--panel-foreground) 8%, transparent);
+  --story-quote: color-mix(in srgb, var(--accent) 25%, transparent);
+  --story-tag: color-mix(in srgb, var(--background) 70%, transparent);
+  --story-card-wash: color-mix(in srgb, var(--accent) 12%, transparent);
+  --story-card-glow: color-mix(in srgb, var(--accent) 14%, transparent);
+  --story-card-shadow: inset 0 1px 0 color-mix(in srgb, var(--background) 65%, transparent), 0 20px 48px color-mix(in srgb, var(--foreground) 6%, transparent);
+  --intro-copy: color-mix(in srgb, var(--foreground) 75%, transparent);
+  --intro-floating: color-mix(in srgb, var(--background) 90%, transparent);
+  --intro-action: color-mix(in srgb, var(--background) 80%, transparent);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -251,11 +299,11 @@
   }
 
   .section-block {
-    @apply scroll-mt-28 py-16 md:scroll-mt-32 md:py-24;
+    @apply scroll-mt-20 py-16 md:scroll-mt-24 md:py-24;
   }
 
   .section-label {
-    @apply mb-5 inline-flex w-fit items-center rounded-full border border-foreground/15 bg-background/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground;
+    @apply mb-5 inline-flex w-fit items-center rounded-full border border-section-label-border bg-section-label px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground;
   }
 
   .section-heading {

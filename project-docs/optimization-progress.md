@@ -98,6 +98,7 @@ Current phase: Phase 1 - UI foundation migration plus visual redesign revision, 
 - Dark mode should be supported at the theme-token level and must follow the operating system preference only. Do not add manual light/dark controls, URL overrides, or config-driven mode switching.
 - Each phase should be self-checked by Codex, reviewed by the user, and committed only after approval.
 - Recurring issue patterns requested by the user should be recorded in `project-docs/optimization-memory.md`.
+- For component styling, prefer a default mobile-first state plus the `md` breakpoint. Avoid adding `sm`, `lg`, `xl`, or extra breakpoint tiers unless the layout genuinely needs them.
 - Phase 1 should not preserve the old Bootstrap-era UI structure. Since the project is moving to shadcn-vue/Tailwind, the homepage should receive a more modern and higher-taste visual redesign now.
 - UI review should primarily rely on the user's local visual inspection. Codex should avoid Playwright screenshots unless debugging a concrete interaction or layout issue.
 - `shadcn-vue@latest` currently exposes `vega`, `nova`, `maia`, `lyra`, `mira`, and `luma` presets/styles, but not React shadcn's `new-york` style. Use shadcn-vue/reka components and emulate the desired new-york-like visual language through tokens and local styling instead of forcing a framework rewrite.
@@ -181,4 +182,38 @@ User reviews the revised Phase 1 UI. If approved, create a Phase 1 commit. If is
   - Imported `vue-sonner/style.css` and moved the Toaster to `bottom-right` so the toast is visible and not covered by the fixed nav.
   - Removed reveal transform from the Jobs sticky column and kept it as `lg:sticky`.
   - Restored the Hero personal explanation and checklist in `contents/introduce.md`.
-  - Removed the Hero product/work CTA buttons and added a centered circular arrow link to `#Conversations`.
+  - Removed the Hero product/work CTA buttons and added a centered circular arrow link to the second content section.
+- Started post-Phase-1 user-driven structure refinements:
+  - Renamed the former `Conversations` section to `Testimonials`.
+  - Replaced the multi-file conversation content model with one structured `contents/testimonials.md` file.
+  - The new testimonial cards support per-card Markdown body content, bullet lists, tags, display name, role, optional custom avatar, and optional Lucide icon key.
+  - When no avatar is provided, the component chooses a stable Lucide icon fallback from card metadata.
+  - Adjusted testimonial card styling so it reads as third-party quote content rather than generic content cards.
+  - Removed repeated per-card `Testimonial` labels and removed the `year` field from the content schema.
+  - Changed testimonial layout to a masonry-style column flow so varied text lengths create a more natural staggered rhythm.
+  - Adjusted Testimonials to use one column by default and four masonry columns from the `md` breakpoint upward.
+  - Recorded the default-plus-`md` responsive styling convention in `project-docs/optimization-memory.md`.
+  - Replaced the Testimonials row-based grid with four independent desktop columns so later cards no longer wait for the tallest card in the previous row.
+  - Expanded `contents/testimonials.md` to 12 sample items with mixed paragraph and bullet content for layout testing.
+  - Renamed the section from `Testimonials` to `Stories`, including component name, content file, navigation item, anchor, and internal story-oriented class names.
+  - Removed quote-style card decoration from the section so each card reads more like a story fragment than a testimonial quote.
+  - Simplified the Stories content schema so each item only needs story content plus optional tags; removed `name`, `role`, `icon`, avatar rendering, and related icon fallback logic.
+  - Renamed `Abilities` to `Skills` across component, navigation, and section anchor.
+  - Merged the Skills content model into one `contents/skills.md` file instead of several per-skill Markdown files.
+  - Reworked the Skills UI into a dark skill matrix with configurable skill items, tags, icons, and level bars.
+  - Adjusted the Introduce section from forced `100svh` first-screen layout to content-driven vertical spacing, removing viewport-height constraints and negative bottom offset.
+  - Added semantic color tokens for panel, story, intro, and section-label surfaces in `src/style.css`.
+  - Replaced local opacity color usage in Skills, Stories, and Introduce with those semantic tokens.
+  - Merged Jobs content into one `contents/jobs.md` file and updated `Jobs.vue` to read from the single structured content source.
+  - Added shared Markdown rendering helpers in `src/lib/markdown.js` and reused them in Skills and Jobs for consistent list marker formatting.
+  - Applied the Skills-style left-column Markdown typography to Jobs.
+  - Merged Products content into one `contents/products.md` file and updated `Products.vue` to read from the single structured content source.
+  - Reused the shared Markdown rendering helper for Products section copy and product descriptions.
+  - Merged Works content into one `contents/works.md` file and updated `Works.vue` to read from the single structured content source.
+  - Reused the shared Markdown rendering helper for the Works section introduction and item descriptions.
+  - Renamed `Pricing` to `Services` across component, navigation item, section anchor, and content source.
+  - Merged Services content into one `contents/services.md` file and removed the old `contents/pricing/*.md` content split.
+  - Updated `Services.vue` to consume the single structured content source and keep the existing toast interaction.
+  - Adjusted navigation anchor offsets to match the current fixed navigation height.
+  - Added active-section highlighting to the navigation for both click scrolling and manual scrolling.
+  - Replaced the mobile navigation `Sheet` with a shadcn-vue `Drawer` bottom sheet for smoother mobile navigation.

@@ -13,4 +13,16 @@ This file stores recurring project-specific lessons and issue-resolution pattern
 
 ## Entries
 
-No recurring issue patterns have been recorded yet.
+### 2026-04-24 - Responsive Style Scope
+
+- Symptom: Too many breakpoint-specific utility classes (`sm`, `lg`, `xl`) and extra media queries make later visual tuning harder to maintain.
+- Root cause: Component styles were being tuned at several viewport tiers even when the layout only needed mobile and non-mobile states.
+- Fix: Define styles with a default mobile-first state, then use `md` as the standard non-mobile breakpoint. Add `sm`, `lg`, `xl`, or extra media queries only when there is a concrete layout need, and keep the reason obvious in the surrounding code.
+- Applies to: Component templates, scoped CSS, section layouts, and future Tailwind class definitions.
+
+### 2026-04-24 - Semantic Color Tokens
+
+- Symptom: Component styles used local opacity colors such as `bg-white/10`, `border-white/15`, `text-white/65`, and per-component `rgb(...)` or `color-mix(...)` values.
+- Root cause: Visual hierarchy was tuned inside individual components instead of being represented by reusable theme tokens.
+- Fix: Define reusable semantic tokens in `src/style.css` first, then reference them from components with Tailwind token classes or CSS variables. Keep color mixing, opacity, and theme compatibility inside the global style layer.
+- Applies to: Component colors, panel surfaces, card surfaces, tags, floating UI, shadows, and future theme customization.

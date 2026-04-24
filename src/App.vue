@@ -3,12 +3,12 @@
     <Nav />
     <main id="main-part" class="overflow-x-clip">
       <Introduce />
-      <Conversations />
-      <Abilities />
+      <Stories />
+      <Skills />
       <Jobs />
       <Products />
       <Works />
-      <Pricing />
+      <Services />
       <Footer />
     </main>
     <Toaster position="bottom-right" rich-colors close-button />
@@ -22,12 +22,12 @@ import ScrollReveal from 'scrollreveal';
 
 import Nav from './components/Nav.vue'
 import Introduce from './components/Introduce.vue'
-import Conversations from './components/Conversations.vue'
-import Abilities from './components/Abilities.vue'
+import Stories from './components/Stories.vue'
+import Skills from './components/Skills.vue'
 import Jobs from './components/Jobs.vue'
 import Products from './components/Products.vue'
 import Works from './components/Works.vue'
-import Pricing from './components/Pricing.vue'
+import Services from './components/Services.vue'
 import Footer from './components/Footer.vue'
 
 const scrollEffect = (el, delay = 120, origin = 'bottom', reset = false) => {
