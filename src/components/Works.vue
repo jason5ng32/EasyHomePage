@@ -2,13 +2,12 @@
     <section class="section-block bg-background" id="Works">
         <div class="site-frame">
             <div class="mb-10 grid gap-6 md:grid-cols-[0.75fr_1.25fr] md:items-end">
-                <div>
-                    <Badge variant="outline" class="section-label h-auto">{{ attributes.Badge }}</Badge>
-                    <h2 class="section-heading">{{ attributes.Title }}</h2>
-                </div>
+                <SectionHeader :badge="section.badge" :title="section.title" />
             </div>
 
-            <div class="grid gap-4 md:grid-cols-3">
+            <EmptyState v-if="!works.length" />
+
+            <div v-else class="grid gap-4 md:grid-cols-3">
                 <article
                     v-for="work in works"
                     :key="work.title"
@@ -17,13 +16,13 @@
                     <div class="flex items-start justify-between gap-4">
                         <h3 class="text-2xl font-black leading-tight">{{ work.title }}</h3>
                         <a
-                            class="rounded-full border p-2 text-muted-foreground transition hover:bg-foreground hover:text-background"
+                            class="rounded-full border p-2 text-muted-foreground transition hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                             :href="work.url"
                             target="_blank"
                             rel="noopener noreferrer"
-                            :aria-label="`${attributes.OpenLabel} ${work.title}`"
+                            :aria-label="`${section.openLabel} ${work.title}`"
                         >
-                            <ExternalLinkIcon class="size-4" />
+                            <ExternalLinkIcon class="size-4" aria-hidden="true" />
                         </a>
                     </div>
                     <div class="mt-5 flex flex-wrap gap-2">
@@ -39,18 +38,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { ExternalLinkIcon } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
-import { renderContent } from '@/lib/markdown';
-import { attributes } from '/site/sections/works.md';
+import EmptyState from '@/components/EmptyState.vue';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { worksSection as section } from '@/content/sections';
 
-const works = computed(() => {
-    return [...(attributes.items || [])]
-        .sort((a, b) => (a.date < b.date ? 1 : -1))
-        .map((item) => ({
-            ...item,
-            html: renderContent(item.content || ''),
-        }));
-});
+const works = section.items || [];
 </script>

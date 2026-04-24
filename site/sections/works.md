@@ -1,7 +1,7 @@
 ---
-Badge: '闲着也是闲着'
-Title: '小·品'
-OpenLabel: '打开作品'
+badge: '闲着也是闲着'
+title: '小·品'
+openLabel: '打开作品'
 items:
   - date: '2024-08'
     title: 'LLM Chatbot'

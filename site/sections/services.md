@@ -1,6 +1,6 @@
 ---
-Badge: '我有什么可以帮到你'
-Title: '服·务'
+badge: '我有什么可以帮到你'
+title: '服·务'
 
 alertTitle: '你还真点了购买'
 alertMessage: '在下面的联系方式里找一个来联系吧'

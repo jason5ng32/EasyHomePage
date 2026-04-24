@@ -2,15 +2,12 @@
     <section class="section-block bg-panel text-panel-foreground" id="Services">
         <div class="site-frame">
             <div class="mb-10 grid gap-6 md:grid-cols-[0.8fr_1.2fr] md:items-end">
-                <div>
-                    <Badge class="section-label h-auto border-panel-label-border bg-panel-label text-panel-muted">
-                        {{ attributes.Badge }}
-                    </Badge>
-                    <h2 class="section-heading text-panel-foreground">{{ attributes.Title }}</h2>
-                </div>
+                <SectionHeader :badge="section.badge" :title="section.title" variant="panel" />
             </div>
 
-            <div class="grid gap-4 md:grid-cols-3">
+            <EmptyState v-if="!services.length" variant="panel" />
+
+            <div v-else class="grid gap-4 md:grid-cols-3">
                 <article
                     v-for="service in services"
                     :key="service.title"
@@ -66,25 +63,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { toast } from 'vue-sonner';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-vue-next';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { attributes } from '/site/sections/services.md';
+import EmptyState from '@/components/EmptyState.vue';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { servicesSection as section } from '@/content/sections';
 
-const services = computed(() => {
-    return [...(attributes.items || [])]
-        .map((item) => ({
-            ...item,
-            includes: item.includes || [],
-            excludes: item.excludes || [],
-        }));
-});
+const services = section.items || [];
 
 const showToast = () => {
-    toast.success(attributes.alertTitle, {
-        description: attributes.alertMessage,
+    toast.success(section.alertTitle, {
+        description: section.alertMessage,
         duration: 2000,
     });
 };

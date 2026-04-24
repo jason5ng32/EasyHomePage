@@ -1,8 +1,8 @@
 ---
-Badge: '一些能力'
-Title: '技·能'
-LevelLabel: '熟练度'
-Description: |
+badge: '一些能力'
+title: '技·能'
+levelLabel: '熟练度'
+description: |
   阿禅这个人，主要包含 4 个核心的功能。
 
   既然功能是 4 个了，不妨再来四个基本原则。

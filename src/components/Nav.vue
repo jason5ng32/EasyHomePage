@@ -2,10 +2,11 @@
     <header class="fixed inset-x-0 top-3 z-50 px-3">
         <nav
             id="navbar-top"
+            aria-label="主要导航"
             class="mx-auto flex h-14 max-w-[1120px] items-center justify-between rounded-full border border-border/70 bg-background/85 px-3 shadow-sm backdrop-blur-xl"
         >
-            <a class="flex min-w-0 items-center gap-3 rounded-full pr-3" href="#Introduce" @click="scrollToSection($event, 'Introduce')">
-                <img :src="logo" alt="logo" class="size-9 rounded-full ring-1 ring-border">
+            <a class="flex min-w-0 items-center gap-3 rounded-full pr-3 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50" :href="`#${homeSectionId}`" @click="scrollToSection($event, homeSectionId)">
+                <img :src="logo" :alt="`${siteConfig.brand.name} logo`" class="size-9 rounded-full ring-1 ring-border">
                 <span class="truncate text-sm font-black">{{ siteConfig.brand.name }}</span>
                 <span v-if="versionLabel" class="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground" :title="versionTitle">
                     {{ versionLabel }}
@@ -20,7 +21,8 @@
                         'rounded-full px-3 py-1.5 text-xs font-bold transition',
                         activeSection === item.id
                             ? 'bg-foreground text-background shadow-sm'
-                            : 'text-muted-foreground hover:bg-foreground hover:text-background'
+                            : 'text-muted-foreground hover:bg-foreground hover:text-background',
+                        'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
                     ]"
                     :href="`#${item.id}`"
                     :aria-current="activeSection === item.id ? 'page' : undefined"
@@ -32,7 +34,7 @@
 
             <Drawer v-model:open="mobileNavOpen" direction="bottom">
                 <DrawerTrigger as-child>
-                    <Button variant="ghost" size="icon" class="rounded-full md:hidden" aria-label="Open navigation">
+                    <Button variant="ghost" size="icon" class="rounded-full md:hidden" aria-label="打开导航">
                         <MenuIcon />
                     </Button>
                 </DrawerTrigger>
@@ -45,7 +47,7 @@
                         <DrawerClose v-for="item in navItems" :key="item.id" as-child>
                             <a
                                 :class="[
-                                    'rounded-xl px-3 py-3 text-sm font-bold transition hover:bg-muted hover:text-foreground',
+                                    'rounded-xl px-3 py-3 text-sm font-bold transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                                     activeSection === item.id ? 'bg-muted text-foreground' : 'text-muted-foreground'
                                 ]"
                                 :href="`#${item.id}`"
@@ -83,6 +85,7 @@ const versionLabel = ref('');
 const activeSection = ref(navItems[0]?.id || 'Introduce');
 const mobileNavOpen = ref(false);
 const versionTitle = siteConfig.profile.version.title || '';
+const homeSectionId = navItems[0]?.id || 'Introduce';
 let scrollFrame = null;
 
 const calAge = () => {

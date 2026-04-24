@@ -1,8 +1,8 @@
 ---
-Badge: '代表产品'
-Title: '创·造'
-FeaturedLabel: '最新'
-OpenLabel: '打开产品'
+badge: '代表产品'
+title: '创·造'
+featuredLabel: '最新'
+openLabel: '打开产品'
 
 items:
   - date: '2026'

@@ -295,7 +295,7 @@
 
 @layer components {
   .site-frame {
-    @apply mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1680px] px-4 md:px-8;
   }
 
   .section-block {
@@ -315,7 +315,7 @@
   }
 
   .editorial-grid {
-    @apply grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)];
+    @apply grid min-w-0 gap-6 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)];
   }
 
   .content-copy {

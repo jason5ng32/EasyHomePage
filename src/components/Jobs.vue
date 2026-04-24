@@ -3,13 +3,16 @@
         <div class="site-frame">
             <div class="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start">
                 <div class="md:sticky md:top-28 md:self-start">
-                    <Badge variant="outline" class="section-label h-auto">{{ attributes.Badge }}</Badge>
-                    <h2 class="section-heading">{{ attributes.Title }}</h2>
-                    <div v-html="formattedDescription" class="mt-8 max-w-xl text-base leading-8 text-muted-foreground">
-                    </div>
+                    <SectionHeader
+                        :badge="section.badge"
+                        :title="section.title"
+                        :description-html="section.descriptionHtml"
+                    />
                 </div>
 
-                <div class="relative flex flex-col gap-5">
+                <EmptyState v-if="!jobs.length" />
+
+                <div v-else class="relative flex flex-col gap-5">
                     <div class="absolute left-4 top-6 hidden h-[calc(100%-3rem)] w-px bg-border md:block"></div>
                     <div v-for="job in jobs" :key="job.id"
                         class="reveal-up grid gap-4 md:grid-cols-[2rem_minmax(0,1fr)]">
@@ -26,7 +29,7 @@
                                     <h3 class="mt-2 text-2xl font-black leading-tight">
                                         {{ job.title }}
                                         <span class="text-muted-foreground">@</span>
-                                        <a class="text-primary underline-offset-4 hover:underline" :href="job.url"
+                                        <a class="text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50" :href="job.url"
                                             target="_blank" rel="noopener noreferrer">
                                             {{ job.company }}
                                         </a>
@@ -44,21 +47,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
-import { renderContent } from '@/lib/markdown';
-import { attributes } from '/site/sections/jobs.md';
+import EmptyState from '@/components/EmptyState.vue';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { jobsSection as section } from '@/content/sections';
 
-const formattedDescription = computed(() => {
-    return renderContent(attributes.Description || '', 'content-dot ml-4 mt-2 text-muted-foreground');
-});
-
-const jobs = computed(() => {
-    return [...(attributes.items || [])]
-        .sort((a, b) => (a.date < b.date ? 1 : -1))
-        .map((item) => ({
-            ...item,
-            html: renderContent(item.content || '', 'content-arrow'),
-        }));
-});
+const jobs = section.items || [];
 </script>

@@ -3,12 +3,17 @@
         <div class="site-frame">
             <div class="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:items-start">
                 <div class="md:sticky md:top-28">
-                    <Badge class="section-label h-auto border-panel-label-border bg-panel-label text-panel-muted">{{ attributes.Badge }}</Badge>
-                    <h2 class="section-heading text-panel-foreground">{{ attributes.Title }}</h2>
-                    <div v-html="formattedDescription" class="mt-8 max-w-xl text-base leading-8 text-panel-muted"></div>
+                    <SectionHeader
+                        :badge="section.badge"
+                        :title="section.title"
+                        :description-html="section.descriptionHtml"
+                        variant="panel"
+                    />
                 </div>
 
-                <div class="skill-board">
+                <EmptyState v-if="!skills.length" variant="panel" />
+
+                <div v-else class="skill-board">
                     <article
                         v-for="(skill, index) in skills"
                         :key="skill.title"
@@ -34,7 +39,7 @@
 
                         <div class="mt-7">
                             <div class="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-[0.16em] text-panel-subtle">
-                                <span>{{ attributes.LevelLabel }}</span>
+                                <span>{{ section.levelLabel }}</span>
                                 <span>{{ skill.level }}%</span>
                             </div>
                             <div class="h-1.5 overflow-hidden rounded-full bg-panel-track">
@@ -57,9 +62,9 @@ import {
     UsersIcon,
     SparklesIcon,
 } from 'lucide-vue-next';
-import { Badge } from '@/components/ui/badge';
-import { renderContent } from '@/lib/markdown';
-import { attributes } from '/site/sections/skills.md';
+import EmptyState from '@/components/EmptyState.vue';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { skillsSection as section } from '@/content/sections';
 
 const iconMap = {
     chart: BarChart3Icon,
@@ -68,16 +73,10 @@ const iconMap = {
     users: UsersIcon,
 };
 
-const formattedDescription = computed(() => {
-    return renderContent(attributes.Description || '', 'content-dot ml-4 mt-2 text-panel-muted');
-});
-
 const skills = computed(() => {
-    return (attributes.items || []).map((item) => ({
+    return (section.items || []).map((item) => ({
         ...item,
-        level: Number(item.level || 0),
         iconComponent: iconMap[item.icon] || SparklesIcon,
-        html: renderContent(item.content || ''),
     }));
 });
 </script>

@@ -5,6 +5,8 @@ site:
   language: 'zh-CN'
   loadingTitle: '正在加载主页'
   loadingDescription: '内容马上就绪'
+  emptyStateTitle: '暂时没有内容'
+  emptyStateDescription: '在对应的 Markdown 文件里添加 items 后，这里会自动显示。'
 
 brand:
   name: 'JN'
@@ -27,6 +29,8 @@ theme:
     - ocean
     - forest
     - rose
+  customTokens: {}
+  customDarkTokens: {}
 
 navigation:
   items:
@@ -58,7 +62,7 @@ navigation:
 analytics:
   enabled: true
   provider: 'googleAnalytics'
-  app: 'EasyHomePage'
+  app: 'JasonNgHomePage'
   measurementIds:
     - 'G-Z5G5JGDFMK'
 

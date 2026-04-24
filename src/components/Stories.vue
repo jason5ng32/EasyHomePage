@@ -2,13 +2,12 @@
     <section class="section-block bg-background" id="Stories">
         <div class="site-frame">
             <div class="mb-10 grid gap-6 md:grid-cols-[0.8fr_1.2fr] md:items-end">
-                <div>
-                    <Badge variant="outline" class="section-label h-auto">{{ attributes.Badge }}</Badge>
-                    <h2 class="section-heading">{{ attributes.Title }}</h2>
-                </div>
+                <SectionHeader :badge="section.badge" :title="section.title" />
             </div>
 
-            <div class="story-stack">
+            <EmptyState v-if="!stories.length" />
+
+            <div v-else class="story-stack">
                 <article
                     v-for="item in stories"
                     :key="`mobile-${item.key}`"
@@ -25,7 +24,7 @@
                 </article>
             </div>
 
-            <div class="story-columns">
+            <div v-if="stories.length" class="story-columns">
                 <div v-for="(column, columnIndex) in storyColumns" :key="columnIndex" class="story-column">
                     <article
                         v-for="item in column"
@@ -49,20 +48,14 @@
 
 <script setup>
 import { computed } from 'vue';
-import MarkdownIt from 'markdown-it';
-import { Badge } from '@/components/ui/badge';
-import { attributes } from '/site/sections/stories.md';
-
-const markdown = new MarkdownIt({
-    breaks: true,
-    linkify: true,
-});
+import EmptyState from '@/components/EmptyState.vue';
+import SectionHeader from '@/components/SectionHeader.vue';
+import { storiesSection as section } from '@/content/sections';
 
 const stories = computed(() => {
-    return (attributes.items || []).map((item, index) => ({
+    return (section.items || []).map((item, index) => ({
         ...item,
         key: `story-${index}`,
-        html: markdown.render(item.content || ''),
     }));
 });
 
