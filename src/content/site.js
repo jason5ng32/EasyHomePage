@@ -28,8 +28,8 @@ export const resolveContentAsset = (path = '') => {
 
 export const siteConfig = {
     site: {
-        title: 'EasyHomePage',
-        description: '',
+        title: 'Jason Ng、阿禅与伍嘉贤的网络档案',
+        description: '伍嘉贤（Jason Ng）的网络档案页面，包含联系方式、网络踪迹等。',
         language: 'zh-CN',
         loadingTitle: 'Loading',
         loadingDescription: '',
@@ -68,7 +68,7 @@ export const siteConfig = {
     analytics: {
         enabled: false,
         provider: '',
-        app: 'EasyHomePage',
+        app: 'JasonNgHomePage',
         measurementIds: [],
         ...(attributes.analytics || {}),
     },
@@ -117,7 +117,7 @@ const setIconHref = (selector, href) => {
 
 export const applySiteMetadata = () => {
     document.documentElement.lang = siteConfig.site.language || 'zh-CN';
-    document.title = siteConfig.site.title || 'EasyHomePage';
+    document.title = siteConfig.site.title || 'Jason Ng、阿禅与伍嘉贤的网络档案';
     setMetaContent('meta[name="description"]', siteConfig.site.description);
     setIconHref('link[rel="icon"]', resolveContentAsset(siteConfig.brand.favicon));
 };
