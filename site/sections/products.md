@@ -8,7 +8,7 @@ items:
   - date: '2026'
     title: 'Beavern'
     cover: 'beavern.jpg'
-    url: 'https://beavern.app/'
+    url: 'https://beavern.com/'
     tags:
       - 理财
       - 垂直领域
