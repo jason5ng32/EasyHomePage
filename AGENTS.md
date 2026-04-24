@@ -252,7 +252,7 @@ Do not add Vue I18n, locale routing, language switchers, or locale folder restru
 
 ## Git And Workflow
 
-- Work on `dev` unless the user gives a different branch instruction.
+- For future development, treat `dev` as the sync/rebase base. When an AI worktree needs to update, fetch/rebase from the user's `dev` branch, then do implementation work on a separate branch/worktree unless the user explicitly instructs otherwise.
 - Do not commit without explicit user approval.
 - The expected flow is: AI edits, AI self-checks, user reviews, user requests fixes if needed, user approves commit, AI commits.
 - One concern per commit. Do not bundle unrelated work.
