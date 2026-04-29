@@ -61,7 +61,7 @@ items:
 
   - date: '2019'
     title: '可能吧排版器'
-    url: 'https://knb.im/mp'
+    url: 'https://mp.knb.im/'
     tags:
       - PHP
       - HTML
