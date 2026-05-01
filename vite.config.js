@@ -95,9 +95,12 @@ export default defineConfig({
           }
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name.endsWith('.woff') || assetInfo.name.endsWith('.woff2')) {
+          const assetName = assetInfo.names?.[0] || assetInfo.originalFileNames?.[0] || assetInfo.name || '';
+
+          if (assetName.endsWith('.woff') || assetName.endsWith('.woff2')) {
             return 'fonts/[name][extname]';
           }
+
           return 'assets/[name]-[hash][extname]';
         },
       }

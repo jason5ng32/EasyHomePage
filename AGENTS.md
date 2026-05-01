@@ -1,278 +1,46 @@
 # AGENTS.md
 
-Single source of truth for anyone — human or AI — contributing to EasyHomePage.
+> **维护规则**：≤ 80 行；只写 EasyHomePage 专属约定，不重复全局 Profile / 红线 / 蓝线 / 灰线；`<待补充>` 表示暂未确认，应通过读代码、查 [local-context.md](./local-context.md) 或问用户来获取；每条 Never 配一条 Do；末尾 [local-context.md](./local-context.md) 指向必须保留。
 
-This project is a Markdown-driven personal homepage template. Most users should be able to create their own homepage by editing content/config files under `site/`, without touching Vue source code.
+### 项目定位
 
-## Overview
+EasyHomePage 是一个 Markdown + 图片驱动的个人主页模板，让非技术用户通过编辑 `site/` 内容快速生成现代、可部署的静态个人主页。
 
-**EasyHomePage** is a static personal homepage template built with Vue 3, Vite, Tailwind CSS, and shadcn-vue style primitives.
+### 技术栈
 
-The core product promise:
+Vue 3.5 + Vite 8 + JavaScript + Pinia 3；Tailwind CSS 4 + shadcn-vue 风格本地组件；内容层使用 `vite-plugin-markdown`、YAML frontmatter、`markdown-it`；图标用 `lucide-vue-next`，Drawer 用 `vaul-vue`，Toast 用 `vue-sonner`。
 
-- Users edit Markdown, YAML frontmatter, and images.
-- The app renders a polished personal homepage.
-- The final site can be deployed as static files, especially to GitHub Pages.
+### 常用命令
 
-This is not a backend app. It currently has no API layer, no database, no server-side rendering, and no full runtime i18n system.
+- 装依赖：`npm install`
+- 启动 dev：`npm run dev`
+- 跑测试：`<待补充：当前没有正式测试套件>`
+- Lint / Type check：`<待补充：当前没有 lint/typecheck 脚本>`
+- 构建：`npm run build`（Vite 8 需要 Node 20.19+ / 22.12+；本机可用 Node 24）
 
-## Stack
+### 项目特定的陷阱与领域词汇
 
-| Layer | Technology |
-|---|---|
-| Framework | Vue 3 (`<script setup>`, Composition API) |
-| Build | Vite + `@vitejs/plugin-vue` |
-| Content | `vite-plugin-markdown`, YAML frontmatter, `markdown-it` |
-| Styling | Tailwind CSS v4 + semantic CSS variables in `src/style.css` |
-| UI primitives | shadcn-vue copy-in style, built on `reka-ui` |
-| Icons | `lucide-vue-next` |
-| Mobile navigation | `vaul-vue` Drawer |
-| Toast | `vue-sonner` |
-| State | Pinia, currently minimal |
-| Deployment output | `docs/`, for GitHub Pages |
+- Never：不要把渲染结果做成 EasyHomePage 的产品说明页。Do：页面首先是用户自己的个人主页，模板说明放 README。
+- Never：不要在 Vue 组件里硬编码个人事实或 section 文案。Do：优先放进 `site/config.md` 或 `site/sections/*.md`。
+- Never：不要在 section 组件里直接 import Markdown。Do：通过 `@/content/site` 和 `@/content/sections` 读取归一化数据。
+- Never：不要新增无意义字段增加用户填写负担。Do：能用数组顺序表达的内容就不要额外加 `order`。
+- Never：不要散落 `bg-white/10`、`border-white/15`、裸 `rgb(...)`。Do：使用或扩展 `src/style.css` 的语义化 token。
+- Never：不要添加手动暗黑模式切换。Do：暗黑模式只跟随系统。
+- Never：不要默认增加 `sm:`、`lg:`、`xl:` 多断点。Do：默认移动端样式 + `md:`，除非有明确布局理由。
+- Never：不要把所有区块做成同一种卡片。Do：Stories、Skills、Jobs、Products、Works、Services 应有各自视觉角色。
+- Never：不要把 `docs/` 当源码维护。Do：把它视为 `npm run build` 的构建产物。
+- Never：不要把 workflow 改回依赖 lockfile 的 `npm ci`。Do：保持用户偏好的 `npm install` 流程，除非用户改变决定。
+- Never：不要继续依赖 UA 统计代码。Do：Google Analytics 使用 GA4 Measurement ID（`G-...`）。
+- Never：不要只看运行时 metadata。Do：title、description、favicon、loading 文案、统计代码也要考虑 Vite 构建期 HTML 注入。
+- Never：不要主动实现完整运行时 i18n。Do：保留单语言内容模式，让用户通过 Markdown/config 自行选择语言。
 
-## Commands
+### Git / PR 约定
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Start Vite dev server. Default port is `18772` unless `FRONTEND_PORT` is set. |
-| `npm run build` | Production build into `docs/`. |
-| `npm run preview` | Vite preview of the build output. |
-| `npm run start` | Run `server.js` for serving the built site. |
+- `dev` 是用户自己的集成分支；AI 不应占用、重建或长期停留在 `dev` 上。
+- 需要开发时，从用户的 `dev` 同步，再使用独立分支或独立 worktree。
+- 实现类改动交付前至少运行 `npm run build`；纯文档改动可不构建。
+- 内容结构、主题配置、部署流程、统计配置变化时，同步评估是否更新 README。
 
-There is no formal test suite right now. For implementation changes, run at least `npm run build` before handing off.
+---
 
-## Project Layout
-
-```text
-.
-├── AGENTS.md
-├── README.md
-├── index.html
-├── vite.config.js
-├── package.json
-│
-├── site/                       User-editable source
-│   ├── config.md               Global site config
-│   ├── sections/               One Markdown file per homepage section
-│   │   ├── introduce.md
-│   │   ├── stories.md
-│   │   ├── skills.md
-│   │   ├── jobs.md
-│   │   ├── products.md
-│   │   ├── works.md
-│   │   ├── services.md
-│   │   └── footer.md
-│   └── assets/                 User images and product screenshots
-│
-├── src/
-│   ├── App.vue                 App shell; renders enabled sections in config order
-│   ├── main.js                 App bootstrap, metadata, theme, analytics
-│   ├── theme.js                Theme preset + custom token application
-│   ├── style.css               Tailwind entry and design tokens
-│   ├── content/                Config/content adapters and guards
-│   ├── components/             Homepage sections and shared components
-│   ├── components/ui/          shadcn-vue primitives
-│   └── lib/                    Shared frontend helpers
-│
-├── docs/                       Ignored build output for GitHub Pages
-├── project-docs/               Ignored local optimization notes and progress
-└── ref/                        Ignored/reference material only
-```
-
-## Content Model
-
-User-facing content lives in `site/`.
-
-- `site/config.md` controls global metadata, navigation order, section visibility, brand images, theme preset, custom color tokens, analytics, and social links.
-- `site/sections/*.md` controls section content. Each homepage section has one structured Markdown file.
-- `site/assets/` stores images referenced by config or section Markdown.
-
-### Frontmatter Style
-
-Use lower camel case for content fields:
-
-- Good: `title`, `subtitle`, `badge`, `openLabel`, `featuredLabel`, `heroStatValue`
-- Avoid: `Title`, `Badge`, `OpenLabel`
-
-For section item lists, prefer this shape:
-
-```yaml
-items:
-  - title: 'Example'
-    date: '2026'
-    tags:
-      - Tag
-    content: |
-      Markdown copy goes here.
-```
-
-### Sorting
-
-- Jobs and Works sort by `date` descending.
-- Products sort by year/date descending.
-- Services and Stories keep author-defined order.
-- The first Product is treated as the featured product after sorting.
-
-### Navigation
-
-`site/config.md` navigation controls both nav items and actual section rendering.
-
-Known section IDs:
-
-- `Introduce`
-- `Stories`
-- `Skills`
-- `Jobs`
-- `Products`
-- `Works`
-- `Services`
-- `Footer`
-
-Do not invent a new `id` without adding the corresponding section component and content adapter.
-
-## Architecture Conventions
-
-### JavaScript And Vue
-
-- Use JavaScript only. Do not introduce TypeScript unless the user explicitly decides to migrate the project.
-- Vue components use `<script setup>` and the Composition API.
-- Use the `@` alias for imports from `src`, for example `@/content/sections`.
-- Keep section components mostly presentational. Content loading, sorting, image resolution, defaults, and common guards belong in `src/content/`.
-
-### Content Layer
-
-- `src/content/site.js` is the adapter for global config and content asset paths.
-- `src/content/sections.js` is the adapter for section Markdown.
-- `src/content/guards.js` provides lightweight runtime warnings for common content mistakes.
-- Do not import `site/sections/*.md` directly inside section components. Import normalized section data from `@/content/sections`.
-- Do not hardcode user-facing personal facts in Vue files if they can reasonably live in `site/config.md` or a section Markdown file.
-
-### Markdown Rendering
-
-- Reuse helpers in `src/lib/markdown.js`.
-- Use `renderContent` for raw Markdown strings.
-- Use `formatListHtml` only when the Markdown plugin has already produced HTML.
-- Avoid ad hoc string replacement in components when a shared Markdown helper can express the pattern.
-
-## UI System
-
-### shadcn-vue First
-
-Before hand-rolling a common UI primitive:
-
-1. Check `src/components/ui/`.
-2. If no local primitive fits, check shadcn-vue patterns and copy in a compatible primitive if needed.
-3. Only hand-roll Tailwind markup when the shape is truly section-specific.
-
-Current local primitives include button, badge, card, drawer, sheet, separator, sonner, tabs, tooltip, and avatar.
-
-### Design Tokens
-
-Use semantic tokens from `src/style.css`.
-
-Preferred classes include:
-
-- `bg-background`, `text-foreground`
-- `bg-card`, `text-card-foreground`
-- `bg-muted`, `text-muted-foreground`
-- `bg-primary`, `text-primary-foreground`
-- `bg-accent`, `text-accent-foreground`
-- `border`, `border-border`
-- panel-specific tokens such as `bg-panel`, `text-panel-muted`, `bg-panel-card`
-
-Do not scatter one-off opacity colors such as `bg-white/10`, `border-white/15`, or raw `rgb(...)` component colors. Add or reuse semantic tokens in `src/style.css` instead.
-
-Theme presets live in `src/style.css`; user selection and optional token overrides live in `site/config.md`.
-
-Dark mode follows the operating system only. Do not add a manual dark-mode toggle, URL mode override, or config-driven light/dark switch.
-
-### Responsive Rules
-
-Default to one mobile-first style plus the `md` breakpoint.
-
-- Use default classes for mobile.
-- Use `md:` for the non-mobile layout.
-- Avoid `sm:`, `lg:`, `xl:`, and extra media-query tiers unless there is a concrete layout reason.
-
-This rule applies to page-level sections and custom components. Stock shadcn-vue primitives may still contain their own variant names or internal responsive classes.
-
-### Visual Direction
-
-This template should feel like a modern personal homepage, not a project documentation page and not a landing page explaining EasyHomePage itself.
-
-Design priorities:
-
-- Personal identity is the first-viewport signal.
-- Content should feel editorial, confident, and polished.
-- Keep whitespace intentional.
-- Avoid fake marketing sections, project usage instructions inside the rendered homepage, or text that explains the template.
-- Cards should have clear section-specific roles; avoid making every section feel visually identical.
-- Use real images when imagery matters. Product screenshots should be framed with stable aspect ratios.
-
-Do not preserve old Bootstrap-era UI patterns just because they existed before.
-
-### Motion
-
-- Use restrained motion that supports hierarchy.
-- Respect `prefers-reduced-motion`.
-- `ScrollReveal` is acceptable for page reveal effects, but do not apply it to hero content in a way that makes the first viewport appear empty.
-
-## Accessibility
-
-Keep the baseline accessibility polish intact:
-
-- Preserve the skip link in `App.vue`.
-- Keep `<main id="main-part" tabindex="-1">`.
-- Navigation needs an explicit `aria-label`.
-- Icon-only links and buttons need `aria-label`.
-- Decorative icons should use `aria-hidden="true"`.
-- Images need useful `alt` text; if an image is content, the `alt` should identify it.
-- Custom focus styles must be visible.
-- Do not remove keyboard usability while improving visuals.
-
-## Internationalization Scope
-
-Full runtime i18n is intentionally out of scope for now.
-
-Rationale:
-
-- Most visible copy is user-authored Markdown or config.
-- A user can author the whole site in one language by editing `site/`.
-- `site.site.language`, title, and description already drive basic metadata.
-
-Do not add Vue I18n, locale routing, language switchers, or locale folder restructuring unless the user explicitly reopens the i18n decision.
-
-## Testing And Verification
-
-- Run `npm run build` before handing off implementation changes.
-- For visual changes, the user prefers to inspect the UI locally. Do not default to Playwright screenshots for routine layout review.
-- Use browser automation only when debugging a concrete interaction/layout issue or when the user asks for it.
-- If a change affects content authoring, verify that a malformed but common input fails gracefully or produces a clear `[EasyHomePage content]` warning.
-
-## Git And Workflow
-
-- For future development, treat `dev` as the sync/rebase base. When an AI worktree needs to update, fetch/rebase from the user's `dev` branch, then do implementation work on a separate branch/worktree unless the user explicitly instructs otherwise.
-- Do not commit without explicit user approval.
-- The expected flow is: AI edits, AI self-checks, user reviews, user requests fixes if needed, user approves commit, AI commits.
-- One concern per commit. Do not bundle unrelated work.
-- Preserve user changes. If the worktree is dirty, inspect before editing and do not revert changes you did not make.
-- `project-docs/` is intentionally ignored and local-only. Keep progress/memory there when useful, but do not stage it.
-- `docs/` is build output and ignored.
-- `ref/` is reference material. Do not treat it as product source unless the user explicitly asks.
-
-## Documentation
-
-- Keep `README.md` focused on non-technical users configuring their own homepage.
-- If content schema, directory structure, theme config, or deployment workflow changes, update README in the same change unless the user explicitly wants docs deferred.
-- Keep `AGENTS.md` current when project conventions change.
-
-## Current Product Decisions
-
-- Use `site/` as the user-facing content/config/assets directory.
-- Keep the original personal content as the default sample content for now.
-- Use single-file Markdown per section.
-- Use config-driven section order and visibility.
-- Use built-in theme presets plus optional custom semantic color tokens.
-- Keep dark mode system-driven only.
-- Skip screenshots in README for now.
+如果工作区根存在 [local-context.md](./local-context.md)，请一并读取和使用——里面是本项目对应的 Knowledge Hub 资源链接（仅本机生效，不进 git）。
