@@ -2,7 +2,7 @@
     <header class="fixed inset-x-0 top-3 z-50 px-3">
         <nav
             id="navbar-top"
-            aria-label="主要导航"
+            :aria-label="store.t('mainNavigation')"
             class="mx-auto flex h-14 max-w-[1120px] items-center justify-between rounded-full border border-border/70 bg-background/85 px-3 shadow-sm backdrop-blur-xl"
         >
             <a class="flex min-w-0 items-center gap-3 rounded-full pr-3 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50" :href="`#${homeSectionId}`" @click="scrollToSection($event, homeSectionId)">
@@ -32,22 +32,59 @@
                 </a>
             </div>
 
+            <!-- Desktop language switcher -->
+            <div v-if="isMultiLocale" class="hidden items-center rounded-full border border-border/70 bg-muted/40 p-0.5 md:flex">
+                <button
+                    v-for="loc in availableLocales"
+                    :key="loc.code"
+                    :class="[
+                        'rounded-full px-2.5 py-1 text-[11px] font-bold transition cursor-pointer',
+                        currentLocale === loc.code
+                            ? 'bg-foreground text-background shadow-xs'
+                            : 'text-muted-foreground hover:text-foreground'
+                    ]"
+                    :aria-label="`Switch language to ${loc.name}`"
+                    @click="changeLocale(loc.code)"
+                >
+                    {{ loc.short }}
+                </button>
+            </div>
+
             <Drawer v-model:open="mobileNavOpen" direction="bottom">
                 <DrawerTrigger as-child>
-                    <Button variant="ghost" size="icon" class="rounded-full md:hidden" aria-label="打开导航">
+                    <Button variant="ghost" size="icon" class="rounded-full md:hidden" :aria-label="store.t('openNavigation')">
                         <MenuIcon />
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent class="max-h-[82svh] rounded-t-4xl">
-                    <DrawerHeader class="px-5 text-left">
-                        <DrawerTitle>{{ siteConfig.brand.name }}</DrawerTitle>
-                        <DrawerDescription>{{ versionLabel ? `${versionTitle} ${versionLabel}` : siteConfig.site.description }}</DrawerDescription>
-                    </DrawerHeader>
-                    <div class="flex max-h-[60svh] flex-col gap-2 overflow-y-auto px-5 pb-6">
+                    <DrawerTitle class="sr-only">{{ siteConfig.brand.name }}</DrawerTitle>
+                    <DrawerDescription class="sr-only">{{ siteConfig.site.description }}</DrawerDescription>
+
+                    <!-- Mobile drawer compact language switcher -->
+                    <div class="flex items-center justify-end px-5 pt-3 pb-1">
+                        <div v-if="isMultiLocale" class="inline-flex items-center rounded-full border border-border/70 bg-muted/40 p-0.5">
+                            <button
+                                v-for="loc in availableLocales"
+                                :key="loc.code"
+                                :class="[
+                                    'rounded-full px-2.5 py-1 text-[11px] font-bold transition cursor-pointer',
+                                    currentLocale === loc.code
+                                        ? 'bg-foreground text-background shadow-xs'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                ]"
+                                :aria-label="`Switch language to ${loc.name}`"
+                                @click="changeLocale(loc.code)"
+                            >
+                                {{ loc.short }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex max-h-[70svh] flex-col gap-1.5 overflow-y-auto px-5 pb-8 pt-1">
                         <DrawerClose v-for="item in navItems" :key="item.id" as-child>
                             <a
                                 :class="[
-                                    'rounded-xl px-3 py-3 text-sm font-bold transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                                    'rounded-xl px-4 py-3 text-base font-bold transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                                     activeSection === item.id ? 'bg-muted text-foreground' : 'text-muted-foreground'
                                 ]"
                                 :href="`#${item.id}`"
@@ -65,42 +102,61 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { MenuIcon } from 'lucide-vue-next';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { MenuIcon } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
     DrawerClose,
     DrawerContent,
     DrawerDescription,
-    DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import { navigationItems, resolveContentAsset, siteConfig } from '@/content/site';
+import { resolveContentAsset } from '@/content/site';
+import { useMainStore } from '@/store';
 
-const navItems = navigationItems;
-const logo = resolveContentAsset(siteConfig.brand.logo);
+const store = useMainStore();
+const siteConfig = computed(() => store.siteConfig);
+const navItems = computed(() => store.navigationItems);
+const availableLocales = computed(() => store.availableLocales);
+const isMultiLocale = computed(() => store.isMultiLocale);
+const currentLocale = computed(() => store.currentLocale);
+
+const logo = computed(() => resolveContentAsset(siteConfig.value.brand.logo));
 const versionLabel = ref('');
-const activeSection = ref(navItems[0]?.id || 'Introduce');
+const activeSection = ref('Introduce');
 const mobileNavOpen = ref(false);
-const versionTitle = siteConfig.profile.version.title || '';
-const homeSectionId = navItems[0]?.id || 'Introduce';
+const versionTitle = computed(() => siteConfig.value.profile.version.title || '');
+const homeSectionId = computed(() => navItems.value[0]?.id || 'Introduce');
 let scrollFrame = null;
 
 const calAge = () => {
-    if (!siteConfig.profile.version.enabled || !siteConfig.profile.birthDate) {
+    const profile = siteConfig.value.profile;
+    if (!profile.version.enabled || !profile.birthDate) {
+        versionLabel.value = '';
         return;
     }
 
     const now = new Date();
-    const birth = new Date(siteConfig.profile.birthDate);
+    const birth = new Date(profile.birthDate);
     const diff = now.getTime() - birth.getTime();
     const ageInMilliseconds = new Date(diff);
     const ageInYears = Math.abs(ageInMilliseconds.getUTCFullYear() - 1970);
     const ageInDecimal = ageInYears + (ageInMilliseconds.getMonth() / 12);
-    versionLabel.value = `${siteConfig.profile.version.prefix || ''}${ageInDecimal.toFixed(2)}`;
+    versionLabel.value = `${profile.version.prefix || ''}${ageInDecimal.toFixed(2)}`;
 };
+
+const changeLocale = (locale) => {
+    store.setLocale(locale);
+};
+
+watch(
+    () => [siteConfig.value.profile.birthDate, siteConfig.value.profile.version.prefix, siteConfig.value.profile.version.enabled],
+    () => {
+        calAge();
+    }
+);
 
 const getScrollOffset = () => {
     const navbar = document.getElementById('navbar-top');
@@ -143,7 +199,7 @@ const scrollToSectionFromDrawer = (event, sectionId) => {
 
 const updateActiveSection = () => {
     const offset = getScrollOffset() + 24;
-    const sections = navItems
+    const sections = navItems.value
         .map((item) => ({
             id: item.id,
             element: document.getElementById(item.id),
@@ -188,6 +244,7 @@ const requestActiveSectionUpdate = () => {
 
 onMounted(() => {
     calAge();
+    activeSection.value = navItems.value[0]?.id || 'Introduce';
     updateActiveSection();
     window.addEventListener('scroll', requestActiveSectionUpdate, { passive: true });
     window.addEventListener('resize', requestActiveSectionUpdate);

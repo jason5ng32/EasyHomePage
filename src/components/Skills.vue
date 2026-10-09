@@ -61,10 +61,13 @@ import {
     StoreIcon,
     UsersIcon,
     SparklesIcon,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { skillsSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
+
+const store = useMainStore();
+const section = computed(() => store.sections.skills);
 
 const iconMap = {
     chart: BarChart3Icon,
@@ -74,7 +77,7 @@ const iconMap = {
 };
 
 const skills = computed(() => {
-    return (section.items || []).map((item) => ({
+    return (section.value.items || []).map((item) => ({
         ...item,
         iconComponent: iconMap[item.icon] || SparklesIcon,
     }));

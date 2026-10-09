@@ -10,22 +10,23 @@ import App from './App.vue'
 import Analytics from 'analytics';
 import googleAnalytics from '@analytics/google-analytics';
 
-// 创建 Vue 实例
-applySiteMetadata();
+// Initialize theme preferences and Vue app instance
 applyThemePreferences();
 const app = createApp(App);
 const pinia = createPinia();
 
-// 注册 Pinia
+// Register Pinia store
 app.use(pinia);
 const store = useMainStore(pinia); 
+applySiteMetadata(store.currentLocale);
 
-if (siteConfig.analytics.enabled && siteConfig.analytics.provider === 'googleAnalytics') {
+const currentConfig = store.siteConfig;
+if (currentConfig.analytics.enabled && currentConfig.analytics.provider === 'googleAnalytics') {
     const analytics = Analytics({
-        app: siteConfig.analytics.app || siteConfig.site.title,
+        app: currentConfig.analytics.app || currentConfig.site.title,
         plugins: [
             googleAnalytics({
-                measurementIds: siteConfig.analytics.measurementIds || [],
+                measurementIds: currentConfig.analytics.measurementIds || [],
             })
         ]
     });
@@ -33,7 +34,7 @@ if (siteConfig.analytics.enabled && siteConfig.analytics.provider === 'googleAna
     analytics.page();
 }
 
-// 监听窗口大小变化
+// Track viewport size changes for responsive layout
 function handleResize() {
     store.setIsMobile(window.innerWidth < 768 ? true : false);
 }

@@ -68,15 +68,18 @@
 
 <script setup>
 import { computed } from 'vue';
-import { ExternalLinkIcon } from 'lucide-vue-next';
+import { ExternalLinkIcon } from '@lucide/vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { productsSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
+
+const store = useMainStore();
+const section = computed(() => store.sections.products);
 
 const products = computed(() => {
-    return section.items || [];
+    return section.value.items || [];
 });
 
 const featuredProduct = computed(() => products.value[0]);

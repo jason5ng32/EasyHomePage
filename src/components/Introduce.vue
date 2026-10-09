@@ -33,7 +33,7 @@
                 size="icon-lg"
                 variant="outline"
                 class="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full bg-intro-action shadow-sm backdrop-blur"
-                :aria-label="`滚动到${nextSectionLabel}`"
+                :aria-label="`${store.t('scrollTo')}${nextSectionLabel}`"
             >
                 <ChevronDownIcon />
             </Button>
@@ -42,17 +42,23 @@
 </template>
 
 <script setup>
-import { ChevronDownIcon } from 'lucide-vue-next';
+import { computed } from 'vue';
+import { ChevronDownIcon } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
-import { navigationItems, resolveContentAsset, siteConfig } from '@/content/site';
-import { introduceSection as section } from '@/content/sections';
+import { resolveContentAsset } from '@/content/site';
+import { useMainStore } from '@/store';
 
-const avatarStyle = {
-    backgroundImage: `url('${resolveContentAsset(siteConfig.brand.avatar)}')`,
-};
+const store = useMainStore();
+const section = computed(() => store.sections.introduce);
+const siteConfig = computed(() => store.siteConfig);
+const navigationItems = computed(() => store.navigationItems);
 
-const currentIndex = navigationItems.findIndex((item) => item.id === 'Introduce');
-const nextSection = navigationItems[currentIndex + 1] || navigationItems.find((item) => item.id !== 'Introduce') || { id: 'Stories', label: '下一部分' };
-const nextSectionId = nextSection.id;
-const nextSectionLabel = nextSection.label || '下一部分';
+const avatarStyle = computed(() => ({
+    backgroundImage: `url('${resolveContentAsset(siteConfig.value.brand.avatar)}')`,
+}));
+
+const currentIndex = computed(() => navigationItems.value.findIndex((item) => item.id === 'Introduce'));
+const nextSection = computed(() => navigationItems.value[currentIndex.value + 1] || navigationItems.value.find((item) => item.id !== 'Introduce') || { id: 'Stories', label: store.t('nextSection') });
+const nextSectionId = computed(() => nextSection.value.id);
+const nextSectionLabel = computed(() => nextSection.value.label || store.t('nextSection'));
 </script>

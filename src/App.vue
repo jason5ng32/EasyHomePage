@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-background">
-    <a class="skip-link" href="#main-part">跳到主要内容</a>
+    <a class="skip-link" href="#main-part">{{ store.t('skipLink') }}</a>
     <Nav />
     <main id="main-part" class="overflow-x-clip" tabindex="-1">
       <component
@@ -16,7 +16,7 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { Toaster } from '@/components/ui/sonner';
-import { navigationItems } from '@/content/site';
+import { useMainStore } from '@/store';
 import ScrollReveal from 'scrollreveal';
 
 import Nav from './components/Nav.vue'
@@ -28,6 +28,8 @@ import Products from './components/Products.vue'
 import Works from './components/Works.vue'
 import Services from './components/Services.vue'
 import Footer from './components/Footer.vue'
+
+const store = useMainStore();
 
 const sectionRegistry = {
   Introduce,
@@ -41,11 +43,15 @@ const sectionRegistry = {
 };
 
 const defaultSectionOrder = Object.keys(sectionRegistry);
-const configuredSectionIds = navigationItems.length
-  ? navigationItems.map((item) => item.id)
-  : defaultSectionOrder;
 
-const sections = computed(() => configuredSectionIds
+const configuredSectionIds = computed(() => {
+  const items = store.navigationItems;
+  return items && items.length
+    ? items.map((item) => item.id)
+    : defaultSectionOrder;
+});
+
+const sections = computed(() => configuredSectionIds.value
   .map((id) => ({
     id,
     component: sectionRegistry[id],
