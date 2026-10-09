@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import {
     GithubIcon,
     GlobeIcon,
@@ -40,8 +41,10 @@ import {
     RssIcon,
     TwitterIcon,
 } from 'lucide-vue-next';
-import { siteConfig } from '@/content/site';
-import { footerSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
+
+const store = useMainStore();
+const section = computed(() => store.sections.footer);
 
 const socialIconMap = {
     github: GithubIcon,
@@ -54,5 +57,5 @@ const socialIconMap = {
 };
 
 const getSocialIcon = (icon) => socialIconMap[icon] || GlobeIcon;
-const socialLinks = siteConfig.socialLinks || [];
+const socialLinks = computed(() => store.siteConfig.socialLinks || []);
 </script>

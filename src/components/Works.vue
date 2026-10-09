@@ -38,11 +38,14 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { ExternalLinkIcon } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { worksSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
 
-const works = section.items || [];
+const store = useMainStore();
+const section = computed(() => store.sections.works);
+const works = computed(() => section.value.items || []);
 </script>

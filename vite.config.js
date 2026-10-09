@@ -36,13 +36,22 @@ const escapeHtml = (value = '') => {
 };
 
 const getSiteConfig = () => {
-  const configPath = path.resolve(__dirname, 'site/config.md');
-
-  if (!fs.existsSync(configPath)) {
-    return {};
+  const enConfigPath = path.resolve(__dirname, 'site/en/config.md');
+  if (fs.existsSync(enConfigPath)) {
+    return matter(fs.readFileSync(enConfigPath, 'utf8')).data || {};
   }
 
-  return matter(fs.readFileSync(configPath, 'utf8')).data || {};
+  const zhConfigPath = path.resolve(__dirname, 'site/zh-CN/config.md');
+  if (fs.existsSync(zhConfigPath)) {
+    return matter(fs.readFileSync(zhConfigPath, 'utf8')).data || {};
+  }
+
+  const legacyConfigPath = path.resolve(__dirname, 'site/config.md');
+  if (fs.existsSync(legacyConfigPath)) {
+    return matter(fs.readFileSync(legacyConfigPath, 'utf8')).data || {};
+  }
+
+  return {};
 };
 
 const siteMetadataPlugin = () => {
@@ -53,12 +62,12 @@ const siteMetadataPlugin = () => {
       const site = config.site || {};
       const brand = config.brand || {};
 
-      const language = escapeHtml(site.language || 'zh-CN');
+      const language = escapeHtml(site.language || 'en');
       const title = escapeHtml(site.title || 'EasyHomePage');
       const description = escapeHtml(site.description || 'Markdown-driven personal homepage.');
       const favicon = escapeHtml(brand.favicon || 'favicon.ico');
-      const loadingTitle = escapeHtml(site.loadingTitle || '正在加载主页');
-      const loadingDescription = escapeHtml(site.loadingDescription || '内容马上就绪');
+      const loadingTitle = escapeHtml(site.loadingTitle || 'Loading Homepage');
+      const loadingDescription = escapeHtml(site.loadingDescription || 'Getting everything ready...');
 
       return html
         .replace(/<html lang="[^"]*">/, `<html lang="${language}">`)

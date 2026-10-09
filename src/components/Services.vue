@@ -63,18 +63,21 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { toast } from 'vue-sonner';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { servicesSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
 
-const services = section.items || [];
+const store = useMainStore();
+const section = computed(() => store.sections.services);
+const services = computed(() => section.value.items || []);
 
 const showToast = () => {
-    toast.success(section.alertTitle, {
-        description: section.alertMessage,
+    toast.success(section.value.alertTitle, {
+        description: section.value.alertMessage,
         duration: 2000,
     });
 };

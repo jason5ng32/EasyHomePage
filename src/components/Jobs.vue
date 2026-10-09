@@ -47,10 +47,13 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { jobsSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
 
-const jobs = section.items || [];
+const store = useMainStore();
+const section = computed(() => store.sections.jobs);
+const jobs = computed(() => section.value.items || []);
 </script>

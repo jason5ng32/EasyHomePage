@@ -8,20 +8,25 @@
         ]"
         role="status"
     >
-        <p class="text-lg font-black">{{ title || siteConfig.site.emptyStateTitle }}</p>
+        <p class="text-lg font-black">{{ title || defaultTitle }}</p>
         <p
             :class="[
                 'mx-auto mt-3 max-w-xl text-sm leading-7',
                 variant === 'panel' ? 'text-panel-muted' : 'text-muted-foreground'
             ]"
         >
-            {{ description || siteConfig.site.emptyStateDescription }}
+            {{ description || defaultDescription }}
         </p>
     </div>
 </template>
 
 <script setup>
-import { siteConfig } from '@/content/site';
+import { computed } from 'vue';
+import { useMainStore } from '@/store';
+
+const store = useMainStore();
+const defaultTitle = computed(() => store.siteConfig.site.emptyStateTitle || store.t('emptyStateTitle'));
+const defaultDescription = computed(() => store.siteConfig.site.emptyStateDescription || store.t('emptyStateDescription'));
 
 defineProps({
     title: {

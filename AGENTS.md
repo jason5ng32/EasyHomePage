@@ -32,8 +32,8 @@ Vue 3.5 + Vite 8 + JavaScript + Pinia 3；Tailwind CSS 4 + shadcn-vue 风格本�
 - Never：不要把 `docs/` 当源码维护。Do：把它视为 `pnpm run build` 的构建产物。
 - Never：不要把包管理器改回 npm/yarn。Do：统一使用 pnpm（`pnpm install` / `pnpm run ...`），workflow 里用 `pnpm/action-setup` + setup-node `cache: pnpm`，除非用户改变决定。
 - Never：不要继续依赖 UA 统计代码。Do：Google Analytics 使用 GA4 Measurement ID（`G-...`）。
-- Never：不要只看运行时 metadata。Do：title、description、favicon、loading 文案、统计代码也要考虑 Vite 构建期 HTML 注入。
-- Never：不要主动实现完整运行时 i18n。Do：保留单语言内容模式，让用户通过 Markdown/config 自行选择语言。
+- Never：不要只看运行时 metadata。Do：title、description、favicon、loading 文案、统计代码也要考虑 Vite 构建期 HTML 注入（优先以英文 fallback 注入）。
+- Never：不要把多语言做成沉重的外部依赖或散落的键值对。Do：坚持 Markdown 驱动（site/{lang}/ 模式），内容即语言，支持浏览器智能检测与无刷新热切换。
 
 ### Git / PR 约定
 

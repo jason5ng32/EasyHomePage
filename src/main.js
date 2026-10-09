@@ -11,7 +11,6 @@ import Analytics from 'analytics';
 import googleAnalytics from '@analytics/google-analytics';
 
 // 创建 Vue 实例
-applySiteMetadata();
 applyThemePreferences();
 const app = createApp(App);
 const pinia = createPinia();
@@ -19,13 +18,15 @@ const pinia = createPinia();
 // 注册 Pinia
 app.use(pinia);
 const store = useMainStore(pinia); 
+applySiteMetadata(store.currentLocale);
 
-if (siteConfig.analytics.enabled && siteConfig.analytics.provider === 'googleAnalytics') {
+const currentConfig = store.siteConfig;
+if (currentConfig.analytics.enabled && currentConfig.analytics.provider === 'googleAnalytics') {
     const analytics = Analytics({
-        app: siteConfig.analytics.app || siteConfig.site.title,
+        app: currentConfig.analytics.app || currentConfig.site.title,
         plugins: [
             googleAnalytics({
-                measurementIds: siteConfig.analytics.measurementIds || [],
+                measurementIds: currentConfig.analytics.measurementIds || [],
             })
         ]
     });

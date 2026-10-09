@@ -50,10 +50,13 @@
 import { computed } from 'vue';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
-import { storiesSection as section } from '@/content/sections';
+import { useMainStore } from '@/store';
+
+const store = useMainStore();
+const section = computed(() => store.sections.stories);
 
 const stories = computed(() => {
-    return (section.items || []).map((item, index) => ({
+    return (section.value.items || []).map((item, index) => ({
         ...item,
         key: `story-${index}`,
     }));
