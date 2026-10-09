@@ -1,23 +1,23 @@
 ---
 name: 'Jason Ng'
-subtitle: 'A product creator.'
+subtitle: 'A person who builds products.'
 heroStatValue: '20+'
 heroStatLabel: 'years online'
 heroCallout: 'Creating things is the purest joy.'
 
 ---
 
-Hey there! Welcome in, make yourself at home.
+Oh, hello there. Come on in.
 
-Welcome to the personal page of "Ah Chan", a.k.a. Jason Ng (伍嘉贤), or Uncle Chan.
+Welcome to this introduction to a person called Jason Ng, also known as Wu Jiaxian, and Uncle Chan.
 
-I've spent years navigating the crossroads of the internet, digital products, content, and code. I have a habit of turning curiosity into tangible creations, and breaking down complex problems into actionable solutions.
+I have spent years moving between the internet, products, content, and technology. I like turning curiosity into things I make, and breaking complex problems down into plans that can actually be put into practice.
 
-Building this site serves two purposes: keeping my hands dirty with code, and leaving behind some digital footprints to prove I've lived in this world.
+I built this website partly to keep my hands busy, and partly to keep a record—to leave a few digital traces of having lived in this world.
 
-Before you explore, please note that this page:
+Before we begin, a few things you should know about this page:
 
-* Is safe to view at the office
-* Can be browsed while walking
-* Can be checked out at the racetrack
-* Is suitable for minors with parental guidance
+* Safe to view at the office
+* Safe to read while walking
+* Safe to view at a racetrack
+* Minors may view it with a guardian present

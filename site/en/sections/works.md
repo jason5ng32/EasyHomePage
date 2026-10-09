@@ -1,5 +1,5 @@
 ---
-badge: 'JUST FOR FUN'
+badge: 'BUILDING FOR FUN'
 title: 'WORKS'
 openLabel: 'View Work'
 items:

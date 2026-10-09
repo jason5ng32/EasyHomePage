@@ -2,7 +2,7 @@
 badge: 'WHO HIRED HIM'
 title: 'EXPERIENCE'
 description: |
-  If Ah Chan were a product, he has been in production for over 30 years with a remarkably broad user base. Or rather, a delightfully eclectic one.
+  If Jason were a product, he has been in production for over 30 years with a remarkably broad user base. Or rather, a delightfully eclectic one.
 
   As a multi-purpose product, clients have utilized him in diverse ways:
 
@@ -12,7 +12,7 @@ description: |
   * Deployed as a tech journalist & writer
   * Deployed as a motorcycle rider
 
-  As for user satisfaction? Hard to say—people are usually too polite to leave bad reviews.
+  Whether the experience is any good is hard to say. People have to say nice things to be polite, after all.
 
 items:
   - date: '2023-11-01'

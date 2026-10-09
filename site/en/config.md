@@ -1,7 +1,7 @@
 ---
 site:
-  title: 'Jason Ng (Ah Chan) — Web Archive'
-  description: 'Personal web archive of Jason Ng (Ah Chan), featuring contact info, digital footprints, and creations.'
+  title: "Jason Ng's Online Archive"
+  description: 'Personal web archive of Jason Ng (Jiaxian WU), with his work, stories, projects and ways to get in touch.'
   language: 'en'
   loadingTitle: 'Loading Homepage'
   loadingDescription: 'Getting everything ready...'
