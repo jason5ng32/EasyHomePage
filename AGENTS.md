@@ -1,47 +1,47 @@
 # AGENTS.md
 
-> **维护规则**：≤ 80 行；只写 EasyHomePage 专属约定，不重复全局 Profile / 红线 / 蓝线 / 灰线；`<待补充>` 表示暂未确认，应通过读代码、查 [local-context.md](./local-context.md) 或问用户来获取；每条 Never 配一条 Do；末尾 [local-context.md](./local-context.md) 指向必须保留。
+> **Maintenance rules**: ≤ 80 lines; EasyHomePage-specific conventions only, do not repeat global profile / red / blue / grey lines; `<To be added>` indicates unconfirmed info, retrieve via reading code, checking [local-context.md](./local-context.md), or asking the user; every Never must pair with a Do; ending pointer to [local-context.md](./local-context.md) must be preserved.
 
-### 项目定位
+### Project Positioning
 
-EasyHomePage 是一个 Markdown + 图片驱动的个人主页模板，让非技术用户通过编辑 `site/` 内容快速生成现代、可部署的静态个人主页。
+EasyHomePage is a Markdown- and image-driven personal homepage template that enables non-technical users to quickly generate a modern, deployable static personal website by editing files in `site/`.
 
-### 技术栈
+### Tech Stack
 
-Vue 3.5 + Vite 8 + JavaScript + Pinia 4；Tailwind CSS 4 + shadcn-vue 风格本地组件；内容层使用 `vite-plugin-markdown`、YAML frontmatter、`markdown-it`；图标用 `@lucide/vue`，Drawer 用 `vaul-vue`，Toast 用 `vue-sonner`。
+Vue 3.5 + Vite 8 + JavaScript + Pinia 4; Tailwind CSS 4 + shadcn-vue style local components; content layer uses `vite-plugin-markdown`, YAML frontmatter, `markdown-it`; icons via `@lucide/vue`, Drawer via `vaul-vue`, Toast via `vue-sonner`.
 
-### 常用命令
+### Common Commands
 
-- 包管理器：pnpm（本项目已从 npm 迁移到 pnpm，lockfile 为 `pnpm-lock.yaml`）
-- 装依赖：`pnpm install`
-- 启动 dev：`pnpm run dev`
-- 跑测试：`<待补充：当前没有正式测试套件>`
-- Lint / Type check：`<待补充：当前没有 lint/typecheck 脚本>`
-- 构建：`pnpm run build`（Vite 8 需要 Node 20.19+ / 22.12+；本机可用 Node 24）
+- Package manager: pnpm (migrated from npm, lockfile is `pnpm-lock.yaml`)
+- Install dependencies: `pnpm install`
+- Dev server: `pnpm run dev`
+- Run tests: `<To be added: no formal test suite yet>`
+- Lint / Type check: `<To be added: no lint/typecheck script yet>`
+- Production build: `pnpm run build` (Vite 8 requires Node 20.19+ / 22.12+; local Node 24 is compatible)
 
-### 项目特定的陷阱与领域词汇
+### Project-Specific Gotchas & Domain Terms
 
-- Never：不要把渲染结果做成 EasyHomePage 的产品说明页。Do：页面首先是用户自己的个人主页，模板说明放 README。
-- Never：不要在 Vue 组件里硬编码个人事实或 section 文案。Do：优先放进 `site/config.md` 或 `site/sections/*.md`。
-- Never：不要在 section 组件里直接 import Markdown。Do：通过 `@/content/site` 和 `@/content/sections` 读取归一化数据。
-- Never：不要新增无意义字段增加用户填写负担。Do：能用数组顺序表达的内容就不要额外加 `order`。
-- Never：不要散落 `bg-white/10`、`border-white/15`、裸 `rgb(...)`。Do：使用或扩展 `src/style.css` 的语义化 token。
-- Never：不要添加手动暗黑模式切换。Do：暗黑模式只跟随系统。
-- Never：不要默认增加 `sm:`、`lg:`、`xl:` 多断点。Do：默认移动端样式 + `md:`，除非有明确布局理由。
-- Never：不要把所有区块做成同一种卡片。Do：Stories、Skills、Jobs、Products、Works、Services 应有各自视觉角色。
-- Never：不要把 `docs/` 当源码维护。Do：把它视为 `pnpm run build` 的构建产物。
-- Never：不要把包管理器改回 npm/yarn。Do：统一使用 pnpm（`pnpm install` / `pnpm run ...`），workflow 里用 `pnpm/action-setup` + setup-node `cache: pnpm`，除非用户改变决定。
-- Never：不要继续依赖 UA 统计代码。Do：Google Analytics 使用 GA4 Measurement ID（`G-...`）。
-- Never：不要只看运行时 metadata。Do：title、description、favicon、loading 文案、统计代码也要考虑 Vite 构建期 HTML 注入（优先以英文 fallback 注入）。
-- Never：不要把多语言做成沉重的外部依赖或散落的键值对。Do：坚持 Markdown 驱动（site/{lang}/ 模式），内容即语言，支持浏览器智能检测与无刷新热切换。
+- Never: Do not turn rendered pages into EasyHomePage product showcases. Do: The page is primarily the user's personal website; put template docs in README.
+- Never: Do not hardcode personal facts or section copy in Vue components. Do: Put them in `site/config.md` or `site/sections/*.md`.
+- Never: Do not import Markdown directly inside section components. Do: Read normalized data via `@/content/site` and `@/content/sections`.
+- Never: Do not add redundant fields that increase user burden. Do: Use array ordering when sequence suffices instead of adding an extra `order` field.
+- Never: Do not scatter `bg-white/10`, `border-white/15`, or bare `rgb(...)`. Do: Use or extend semantic design tokens in `src/style.css`.
+- Never: Do not add a manual dark mode toggle. Do: Dark mode follows system preferences only.
+- Never: Do not introduce `sm:`, `lg:`, `xl:` breakpoints by default. Do: Use default mobile styles + `md:` unless there is a clear layout rationale.
+- Never: Do not style all sections with identical card layouts. Do: Stories, Skills, Jobs, Products, Works, and Services must have distinct visual identities.
+- Never: Do not treat `docs/` as source code. Do: Treat it strictly as build artifacts produced by `pnpm run build`.
+- Never: Do not revert package manager to npm/yarn. Do: Consistently use pnpm (`pnpm install` / `pnpm run ...`), and configure `pnpm/action-setup` + setup-node `cache: pnpm` in CI workflows unless the user decides otherwise.
+- Never: Do not continue relying on UA analytics code. Do: Use GA4 Measurement ID (`G-...`) for Google Analytics.
+- Never: Do not rely solely on runtime metadata. Do: Inject title, description, favicon, loading copy, and analytics into HTML at Vite build time (with English fallback preferred).
+- Never: Do not implement i18n with heavy external libraries or scattered key-value maps. Do: Adhere to Markdown-driven structure (`site/{lang}/`), treating content as language, with browser auto-detection and seamless hot-swapping.
 
-### Git / PR 约定
+### Git / PR Conventions
 
-- `dev` 是用户自己的集成分支；AI 不应占用、重建或长期停留在 `dev` 上。
-- 需要开发时，从用户的 `dev` 同步，再使用独立分支或独立 worktree。
-- 实现类改动交付前至少运行 `pnpm run build`；纯文档改动可不构建。
-- 内容结构、主题配置、部署流程、统计配置变化时，同步评估是否更新 README。
+- `dev` is the user's integration branch; AI must not occupy, recreate, or linger on `dev`.
+- When development is needed, synchronize from user's `dev`, then work in an independent branch or worktree.
+- Run at least `pnpm run build` before delivering implementation changes; pure documentation changes can skip this.
+- Evaluate whether to update README whenever content structure, theme config, deployment flow, or analytics settings change.
 
 ---
 
-如果工作区根存在 [local-context.md](./local-context.md)，请一并读取和使用——里面是本项目对应的 Knowledge Hub 资源链接（仅本机生效，不进 git）。
+If [local-context.md](./local-context.md) exists at the workspace root, read and use it—it contains links to Knowledge Hub resources for this project (local machine only, not in git).
