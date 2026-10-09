@@ -333,22 +333,22 @@
   .content-check,
   .content-arrow,
   .content-dot {
-    @apply mb-3 flex gap-3 leading-7 text-muted-foreground;
+    @apply mb-3 flex items-start gap-3 leading-7 text-muted-foreground;
   }
 
   .content-check::before {
     content: "✓";
-    @apply mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground;
+    @apply mt-1 md:mt-1.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground;
   }
 
   .content-arrow::before {
     content: "→";
-    @apply mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background;
+    @apply mt-1 md:mt-1.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background;
   }
 
   .content-dot::before {
     content: "";
-    @apply mt-3 size-2 shrink-0 rounded-full bg-accent;
+    @apply mt-2.5 md:mt-3 size-2 shrink-0 rounded-full bg-accent;
   }
 
   .conversation-tag {
