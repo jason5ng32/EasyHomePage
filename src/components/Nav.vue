@@ -57,15 +57,34 @@
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent class="max-h-[82svh] rounded-t-4xl">
-                    <DrawerHeader class="px-5 text-left">
-                        <DrawerTitle>{{ siteConfig.brand.name }}</DrawerTitle>
-                        <DrawerDescription>{{ versionLabel ? `${versionTitle} ${versionLabel}` : siteConfig.site.description }}</DrawerDescription>
-                    </DrawerHeader>
-                    <div class="flex max-h-[60svh] flex-col gap-2 overflow-y-auto px-5 pb-6">
+                    <DrawerTitle class="sr-only">{{ siteConfig.brand.name }}</DrawerTitle>
+                    <DrawerDescription class="sr-only">{{ siteConfig.site.description }}</DrawerDescription>
+
+                    <!-- 抽屉顶部右上角小语言切换器 -->
+                    <div class="flex items-center justify-end px-5 pt-3 pb-1">
+                        <div v-if="isMultiLocale" class="inline-flex items-center rounded-full border border-border/70 bg-muted/40 p-0.5">
+                            <button
+                                v-for="loc in availableLocales"
+                                :key="loc.code"
+                                :class="[
+                                    'rounded-full px-2.5 py-1 text-[11px] font-bold transition cursor-pointer',
+                                    currentLocale === loc.code
+                                        ? 'bg-foreground text-background shadow-xs'
+                                        : 'text-muted-foreground hover:text-foreground'
+                                ]"
+                                :aria-label="`Switch language to ${loc.name}`"
+                                @click="changeLocale(loc.code)"
+                            >
+                                {{ loc.short }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex max-h-[70svh] flex-col gap-1.5 overflow-y-auto px-5 pb-8 pt-1">
                         <DrawerClose v-for="item in navItems" :key="item.id" as-child>
                             <a
                                 :class="[
-                                    'rounded-xl px-3 py-3 text-sm font-bold transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                                    'rounded-xl px-4 py-3 text-base font-bold transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                                     activeSection === item.id ? 'bg-muted text-foreground' : 'text-muted-foreground'
                                 ]"
                                 :href="`#${item.id}`"
@@ -75,26 +94,6 @@
                                 {{ item.label }}
                             </a>
                         </DrawerClose>
-
-                        <!-- 移动端抽屉内语言切换 -->
-                        <div v-if="isMultiLocale" class="mt-4 border-t border-border/50 pt-4">
-                            <div class="mb-2 text-xs font-bold text-muted-foreground">{{ store.t('language') }}</div>
-                            <div class="flex items-center gap-2">
-                                <button
-                                    v-for="loc in availableLocales"
-                                    :key="loc.code"
-                                    :class="[
-                                        'flex-1 rounded-xl py-2.5 text-center text-xs font-bold transition cursor-pointer',
-                                        currentLocale === loc.code
-                                            ? 'bg-foreground text-background shadow-xs'
-                                            : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
-                                    ]"
-                                    @click="changeLocaleFromDrawer(loc.code)"
-                                >
-                                    {{ loc.name }}
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </DrawerContent>
             </Drawer>
@@ -111,7 +110,6 @@ import {
     DrawerClose,
     DrawerContent,
     DrawerDescription,
-    DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
@@ -151,11 +149,6 @@ const calAge = () => {
 
 const changeLocale = (locale) => {
     store.setLocale(locale);
-};
-
-const changeLocaleFromDrawer = (locale) => {
-    store.setLocale(locale);
-    mobileNavOpen.value = false;
 };
 
 watch(
