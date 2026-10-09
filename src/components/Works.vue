@@ -39,7 +39,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { ExternalLinkIcon } from 'lucide-vue-next';
+import { ExternalLinkIcon } from '@lucide/vue';
 import { Badge } from '@/components/ui/badge';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';

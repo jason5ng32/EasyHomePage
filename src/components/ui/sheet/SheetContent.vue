@@ -1,6 +1,6 @@
 <script setup>
 import { reactiveOmit } from "@vueuse/core";
-import { XIcon } from "lucide-vue-next";
+import { XIcon } from "@lucide/vue";
 import {
   DialogClose,
   DialogContent,

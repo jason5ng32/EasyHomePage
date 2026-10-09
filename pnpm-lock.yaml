@@ -169,6 +169,9 @@ importers:
       '@analytics/google-analytics':
         specifier: ^1.1.0
         version: 1.1.0
+      '@lucide/vue':
+        specifier: ^1.52.0
+        version: 1.52.0(vue@3.5.43)
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.4(@types/node@26.6.4)(jiti@2.7.0))
@@ -196,9 +199,6 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
-      lucide-vue-next:
-        specifier: ^1.0.0
-        version: 1.0.0(vue@3.5.43)
       markdown-it:
         specifier: ^15.0.2
         version: 15.0.2
@@ -324,6 +324,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@lucide/vue@1.52.0':
+    resolution: {integrity: sha512-Gwr6c14jhY6BscoFU+B9OKsr7lg8RTAKOLgW0e61kkFwkt9Q7CZmB9AyJcvhoqapEJgRg2bFoeAcO+cqpgKzEQ==}
+    peerDependencies:
+      vue: '>=3.0.1'
 
   '@oxc-project/types@0.153.0':
     resolution: {integrity: sha512-jSNrRIyvPVLL5E1z/tS5zLAprosGz/FuI1PWwEOz59j3E4TTTzSpqKb/RDGqJhhW0QHYISGXxq582wGx6T11Tw==}
@@ -1059,12 +1064,6 @@ packages:
   linkify-it@6.1.0:
     resolution: {integrity: sha512-wJ/TwpSDTLepCrQoYWYIExIKg5Zchex2Nn5yk2mFnB+6PtdkHtyLx742md9csRjjOnGkKIS/RrbY7l8D6gT9Vw==}
 
-  lucide-vue-next@1.0.0:
-    resolution: {integrity: sha512-V6SPvx1IHTj/UY+FrIYWV5faISsPSb8BnWSFDxAtezWKvWc9ZZ40PDrdu1/Qb5vg4lHWr1hs1BAMGVGm6V1Xdg==}
-    deprecated: Package deprecated. Please use @lucide/vue instead.
-    peerDependencies:
-      vue: '>=3.0.1'
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -1497,6 +1496,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@lucide/vue@1.52.0(vue@3.5.43)':
+    dependencies:
+      vue: 3.5.43
 
   '@oxc-project/types@0.153.0': {}
 
@@ -2148,10 +2151,6 @@ snapshots:
   linkify-it@6.1.0:
     dependencies:
       uc.micro: 3.0.0
-
-  lucide-vue-next@1.0.0(vue@3.5.43):
-    dependencies:
-      vue: 3.5.43
 
   magic-string@0.30.21:
     dependencies:

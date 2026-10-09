@@ -61,7 +61,7 @@ import {
     StoreIcon,
     UsersIcon,
     SparklesIcon,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';
 import { useMainStore } from '@/store';

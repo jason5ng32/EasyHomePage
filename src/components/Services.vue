@@ -65,7 +65,7 @@
 <script setup>
 import { computed } from 'vue';
 import { toast } from 'vue-sonner';
-import { CheckCircleIcon, XCircleIcon } from 'lucide-vue-next';
+import { CheckCircleIcon, XCircleIcon } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState.vue';
 import SectionHeader from '@/components/SectionHeader.vue';

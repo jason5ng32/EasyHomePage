@@ -43,7 +43,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { ChevronDownIcon } from 'lucide-vue-next';
+import { ChevronDownIcon } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import { resolveContentAsset } from '@/content/site';
 import { useMainStore } from '@/store';

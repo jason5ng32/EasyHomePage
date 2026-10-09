@@ -8,7 +8,7 @@ EasyHomePage 是一个 Markdown + 图片驱动的个人主页模板，让非技�
 
 ### 技术栈
 
-Vue 3.5 + Vite 8 + JavaScript + Pinia 3；Tailwind CSS 4 + shadcn-vue 风格本地组件；内容层使用 `vite-plugin-markdown`、YAML frontmatter、`markdown-it`；图标用 `lucide-vue-next`，Drawer 用 `vaul-vue`，Toast 用 `vue-sonner`。
+Vue 3.5 + Vite 8 + JavaScript + Pinia 4；Tailwind CSS 4 + shadcn-vue 风格本地组件；内容层使用 `vite-plugin-markdown`、YAML frontmatter、`markdown-it`；图标用 `@lucide/vue`，Drawer 用 `vaul-vue`，Toast 用 `vue-sonner`。
 
 ### 常用命令
 

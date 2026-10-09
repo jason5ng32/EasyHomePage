@@ -104,7 +104,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { MenuIcon } from 'lucide-vue-next';
+import { MenuIcon } from '@lucide/vue';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
