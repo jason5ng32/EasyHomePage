@@ -37,7 +37,10 @@ pnpm install
 # 2. 启动本地实时预览
 pnpm run dev
 
-# 3. 构建生产静态页面（产物位于 docs/）
+# 3. 运行自动化测试与 Markdown 格式检查
+pnpm run test
+
+# 4. 构建生产静态页面（产物位于 docs/）
 pnpm run build
 ```
 

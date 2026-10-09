@@ -37,7 +37,10 @@ pnpm install
 # 2. Start local development server
 pnpm run dev
 
-# 3. Build for production (output to docs/)
+# 3. Run automated tests and Markdown validation
+pnpm run test
+
+# 4. Build for production (output to docs/)
 pnpm run build
 ```
 

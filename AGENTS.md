@@ -15,7 +15,7 @@ Vue 3.5 + Vite 8 + JavaScript + Pinia 4; Tailwind CSS 4 + shadcn-vue style local
 - Package manager: pnpm (migrated from npm, lockfile is `pnpm-lock.yaml`)
 - Install dependencies: `pnpm install`
 - Dev server: `pnpm run dev`
-- Run tests: `<To be added: no formal test suite yet>`
+- Run tests: `pnpm run test`
 - Lint / Type check: `<To be added: no lint/typecheck script yet>`
 - Production build: `pnpm run build` (Vite 8 requires Node 20.19+ / 22.12+; local Node 24 is compatible)
 
