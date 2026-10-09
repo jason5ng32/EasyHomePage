@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import dotenv, { parse } from 'dotenv';
+import dotenv from 'dotenv';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue'
 import path from "path"
@@ -7,7 +7,6 @@ import fs from 'node:fs';
 import { plugin as mdPlugin } from 'vite-plugin-markdown';
 import MarkdownIt from 'markdown-it';
 import matter from 'gray-matter';
-
 
 dotenv.config();
 
@@ -20,7 +19,7 @@ const markdownIt = new MarkdownIt({
 });
 
 const markdownOptions = {
-  mode: ['markdown','html'],
+  mode: ['markdown', 'html'],
   markdown: (body) => {
     return markdownIt.render(body);
   },
@@ -37,22 +36,66 @@ const escapeHtml = (value = '') => {
 
 const getSiteConfig = () => {
   const rootDir = import.meta.dirname;
-  const enConfigPath = path.resolve(rootDir, 'site/en/config.md');
-  if (fs.existsSync(enConfigPath)) {
-    return matter(fs.readFileSync(enConfigPath, 'utf8')).data || {};
+
+  // 1. Read global configuration
+  const globalConfigPath = path.resolve(rootDir, 'site/config.md');
+  const globalConfig = fs.existsSync(globalConfigPath)
+    ? matter(fs.readFileSync(globalConfigPath, 'utf8')).data || {}
+    : {};
+
+  // 2. Determine default build locale
+  let defaultLocale = 'en';
+  const configuredLanguages = Array.isArray(globalConfig.languages)
+    ? globalConfig.languages
+    : [];
+
+  const explicitDefault = configuredLanguages.find((l) => typeof l === 'object' && l.default)?.code;
+  if (explicitDefault) {
+    defaultLocale = explicitDefault;
+  } else if (configuredLanguages.length > 0) {
+    const first = configuredLanguages[0];
+    defaultLocale = typeof first === 'string' ? first : (first?.code || 'en');
+  } else {
+    // If not declared, scan subdirectories
+    const siteDir = path.resolve(rootDir, 'site');
+    if (fs.existsSync(siteDir)) {
+      const entries = fs.readdirSync(siteDir, { withFileTypes: true });
+      const dirs = entries.filter((e) => e.isDirectory() && e.name !== 'assets').map((e) => e.name);
+      if (dirs.includes('en')) {
+        defaultLocale = 'en';
+      } else if (dirs.length > 0) {
+        defaultLocale = dirs[0];
+      }
+    }
   }
 
-  const zhConfigPath = path.resolve(rootDir, 'site/zh-CN/config.md');
-  if (fs.existsSync(zhConfigPath)) {
-    return matter(fs.readFileSync(zhConfigPath, 'utf8')).data || {};
+  // 3. Read locale-specific metadata
+  const localePath = path.resolve(rootDir, `site/${defaultLocale}/locale.md`);
+  const legacyLocalePath = path.resolve(rootDir, `site/${defaultLocale}/config.md`);
+
+  let localeData = {};
+  if (fs.existsSync(localePath)) {
+    localeData = matter(fs.readFileSync(localePath, 'utf8')).data || {};
+  } else if (fs.existsSync(legacyLocalePath)) {
+    localeData = matter(fs.readFileSync(legacyLocalePath, 'utf8')).data || {};
   }
 
-  const legacyConfigPath = path.resolve(rootDir, 'site/config.md');
-  if (fs.existsSync(legacyConfigPath)) {
-    return matter(fs.readFileSync(legacyConfigPath, 'utf8')).data || {};
-  }
-
-  return {};
+  return {
+    site: {
+      title: 'EasyHomePage',
+      description: 'Markdown-driven personal homepage.',
+      loadingTitle: 'Loading Homepage',
+      loadingDescription: 'Getting everything ready...',
+      language: defaultLocale,
+      ...(globalConfig.site || {}),
+      ...(localeData.site || {}),
+    },
+    brand: {
+      favicon: 'favicon.ico',
+      ...(globalConfig.brand || {}),
+      ...(localeData.brand || {}),
+    },
+  };
 };
 
 const siteMetadataPlugin = () => {
@@ -80,7 +123,6 @@ const siteMetadataPlugin = () => {
     },
   };
 };
-
 
 export default defineConfig({
   base: './',
@@ -121,4 +163,4 @@ export default defineConfig({
     host: '0.0.0.0',
     port: frontEndPort,
   }
-})
+});

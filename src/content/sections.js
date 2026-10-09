@@ -20,7 +20,7 @@ const resolveProductCover = (cover) => {
     return imagePathKey ? productImages[imagePathKey].default : cover;
 };
 
-// 获取特定语言的 section module
+// Resolve section module for a given locale with fallback support
 const getSectionModule = (sectionName, locale) => {
     const localizedPath = `/site/${locale}/sections/${sectionName}.md`;
     if (multiSectionModules[localizedPath]) {
@@ -177,7 +177,7 @@ export const getSections = (locale = fallbackLocale) => {
     return sectionsCache[locale];
 };
 
-// 兼容单例静态导出
+// Backward-compatible static exports initialized with fallback locale
 const defaultSections = getSections(fallbackLocale);
 export const introduceSection = defaultSections.introduce;
 export const storiesSection = defaultSections.stories;

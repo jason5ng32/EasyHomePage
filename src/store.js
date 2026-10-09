@@ -1,4 +1,3 @@
-// store.js
 import { defineStore } from 'pinia';
 import {
     availableLocales,
@@ -14,7 +13,7 @@ import { getUiMessage } from '@/content/i18n-ui';
 const STORAGE_KEY = 'easy-homepage-lang';
 
 const resolveInitialLocale = () => {
-    // 1. 本地缓存用户选择
+    // 1. User choice stored in localStorage
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored && availableLocales.some((l) => l.code === stored)) {
@@ -24,7 +23,7 @@ const resolveInitialLocale = () => {
         // localStorage not available or blocked
     }
 
-    // 2. URL 参数 ?lang=xx
+    // 2. URL search parameter ?lang=xx
     if (typeof window !== 'undefined' && window.location?.search) {
         const params = new URLSearchParams(window.location.search);
         const queryLang = params.get('lang');
@@ -33,20 +32,20 @@ const resolveInitialLocale = () => {
         }
     }
 
-    // 3. 浏览器语言智能匹配
+    // 3. Browser language matching (generic matching for any language)
     if (typeof navigator !== 'undefined') {
         const browserLanguages = navigator.languages || [navigator.language || ''];
         for (const bLang of browserLanguages) {
             if (!bLang) continue;
             const normalized = bLang.toLowerCase();
 
-            // 精确匹配 (如 zh-CN 匹配 zh-CN, en 匹配 en)
+            // Exact match (e.g. ja matches ja, zh-CN matches zh-CN)
             const exactMatch = availableLocales.find((l) => l.code.toLowerCase() === normalized);
             if (exactMatch) {
                 return exactMatch.code;
             }
 
-            // 前缀模糊匹配 (如 zh-HK / zh-TW 匹配 zh-CN，en-US 匹配 en)
+            // Prefix fuzzy match (e.g. ja-JP matches ja, es-ES matches es)
             const prefix = normalized.split('-')[0];
             const prefixMatch = availableLocales.find((l) => {
                 const targetCode = l.code.toLowerCase();
@@ -58,9 +57,8 @@ const resolveInitialLocale = () => {
         }
     }
 
-    // 4. 默认 fallback 语言：英文 'en'（若配置了），否则为系统检测的 fallbackLocale
-    const hasEn = availableLocales.some((l) => l.code === 'en');
-    return hasEn ? 'en' : fallbackLocale;
+    // 4. Default fallback locale configured in the site
+    return fallbackLocale;
 };
 
 export const useMainStore = defineStore('main', {

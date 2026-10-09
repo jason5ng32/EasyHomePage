@@ -1,6 +1,6 @@
 /**
- * 系统通用极简 UI 词条字典
- * 仅用于处理少量内置的界面辅助文本与无障碍标签，核心内容依然由 Markdown 驱动。
+ * Minimal system UI translation dictionary
+ * Used only for internal interface labels and accessibility texts. Content is primarily Markdown-driven.
  */
 export const uiTranslations = {
   'zh-CN': {

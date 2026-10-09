@@ -14,16 +14,15 @@ All user-specific content lives cleanly within the `site/` directory:
 
 ```text
 site/
+  config.md            # Global site-wide configuration (brand, theme, languages, social links, analytics, etc.)
   assets/              # Shared static assets (avatars, logos, project screenshots)
-  en/                  # English content (default & fallback language)
-    config.md          # Site info, branding, theme, navigation, social links
-    sections/          # Section content (intro, stories, skills, experience, etc.)
-  zh-CN/               # Simplified Chinese content
-    config.md
-    sections/
+  en/                  # English content directory (folder name matches language code)
+    locale.md          # English-specific metadata (title, description, navigation labels)
+    sections/          # English section content (intro, stories, skills, experience, etc.)
+  zh-CN/               # Simplified Chinese content directory
+    locale.md          # Chinese-specific metadata
+    sections/          # Chinese section content
 ```
-
-> **Backward Compatibility**: If you only need a single language, you can keep the root structure (`site/config.md` and `site/sections/*.md`). The app will automatically run in single-language mode and hide the language switcher.
 
 ---
 
@@ -46,19 +45,46 @@ Open the URL shown in your terminal (typically `http://localhost:18772`) to prev
 
 ---
 
+## Single-Language vs Dual-Language Deployment
+
+EasyHomePage supports **up to 2 languages** (any two languages in the world) and works out-of-the-box for single-language deployments:
+
+### 1. Single-Language Deployment (Only one language needed)
+If you only need a single language (e.g., pure English or pure Chinese):
+1. In `site/config.md`, declare only that language under `languages` (or leave just one entry);
+2. Keep only the corresponding language folder under `site/` (e.g., keep only `site/en/` and remove other language folders);
+3. **The site automatically operates in single-language mode and hides the language switcher from both the navbar and mobile drawer.**
+
+### 2. Dual-Language Deployment (Bilingual mode)
+1. Configure 2 languages under `languages` in `site/config.md`, optionally marking one with `default: true` as the fallback language;
+2. Maintain the corresponding two subdirectories under `site/` (e.g., `en/` and `zh-CN/`, or any pair like `ja/` and `en/`);
+3. On first visit, the site detects the visitor's browser language and displays the matching version (falling back to the default language if unmatched);
+4. A compact toggle switch (e.g., `EN | 中`) is displayed on desktop and mobile drawer for seamless, zero-reload switching persisted in `localStorage`.
+
+---
+
 ## Customization
 
-### 1. Site Configuration & Navigation (`site/{lang}/config.md`)
+### 1. Global Configuration (`site/config.md`)
 
-Configure site metadata, brand identity, navigation items, and social accounts in `config.md`:
+Manage cross-language settings centrally without duplication:
 
-- **Site & Brand**: `site.title`, `site.description`, `brand.name`, `brand.avatar`, `brand.logo`, etc.
-- **Navigation Ordering & Toggling**: Reordering items in `navigation.items` updates both the navbar order and section layout order. Set `enabled: false` to hide any section.
-- **Social Links**: Configure profiles in `socialLinks` (supports icons like `github`, `twitter`/`x`, `linkedin`, `instagram`, `envelope`, `rss`, `wikipedia`, etc.).
+- **Brand Assets (`brand`)**: `name`, `logo`, `avatar`, `favicon`.
+- **Theme & Colors (`theme`)**: Preset options include `graphite`, `violet`, `ocean`, `forest`, `rose`. Dark mode automatically follows the visitor's system preferences.
+- **Languages (`languages`)**: Specify `code`, display `name`, `short` label, and `default: true`. Supports up to 2 languages.
+- **Social Profiles (`socialLinks`)**: Configure external profile links (supports `github`, `twitter`/`x`, `linkedin`, `instagram`, `envelope`, `rss`, `wikipedia`, etc.).
+- **Analytics (`analytics`)**: Configure GA4 Measurement ID (`G-...`).
 
-### 2. Section Content (`site/{lang}/sections/*.md`)
+### 2. Localized Metadata & Navigation (`site/{lang}/locale.md`)
 
-Each section is powered by a dedicated Markdown file with YAML frontmatter at the top and standard Markdown content:
+Configure copy and navigation labels specific to each language:
+
+- **Site Copy (`site`)**: `title`, `description` (for SEO), `loadingTitle` / `loadingDescription` (initial loading overlay).
+- **Navigation (`navigation.items`)**: Set the display `label` for each section. Reordering items reorganizes both the navbar and section order; set `enabled: false` to hide any section.
+
+### 3. Section Content (`site/{lang}/sections/*.md`)
+
+Each section is powered by a dedicated Markdown file with YAML frontmatter at the top:
 
 | Section File | Purpose | Key Content & Frontmatter |
 | :--- | :--- | :--- |
@@ -70,25 +96,6 @@ Each section is powered by a dedicated Markdown file with YAML frontmatter at th
 | `works.md` | Open source & side works | Project links, tech stack badges, short description |
 | `services.md` | Advisory & consulting services | Pricing, service descriptions, inclusions & exclusions |
 | `footer.md` | Closing note & contact callout | Parting thoughts, contact instructions |
-
-### 3. Theme & Colors
-
-Choose a built-in theme preset in `config.md`:
-
-```yaml
-theme:
-  preset: 'graphite' # Options: graphite, violet, ocean, forest, rose
-```
-
-Dark mode automatically respects the visitor's operating system preferences.
-
----
-
-## Internationalization (i18n)
-
-1. **Auto-Discovery**: Built on the `site/{lang}/` structure. Adding a new language folder (such as `site/ja/`) is automatically recognized by the app with **zero code modifications**.
-2. **Smart Detection & Fallback**: Visitors are automatically served their preferred browser language on first visit. If no match is found, it falls back seamlessly to English (`en`).
-3. **Seamless Live Switcher**: A compact toggle button (`EN | 中`) is integrated in both the desktop navbar and mobile drawer. Switching languages updates the entire page instantly and remembers preference in `localStorage`.
 
 ---
 

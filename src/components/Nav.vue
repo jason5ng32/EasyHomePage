@@ -32,7 +32,7 @@
                 </a>
             </div>
 
-            <!-- 桌面端语言切换器 -->
+            <!-- Desktop language switcher -->
             <div v-if="isMultiLocale" class="hidden items-center rounded-full border border-border/70 bg-muted/40 p-0.5 md:flex">
                 <button
                     v-for="loc in availableLocales"
@@ -60,7 +60,7 @@
                     <DrawerTitle class="sr-only">{{ siteConfig.brand.name }}</DrawerTitle>
                     <DrawerDescription class="sr-only">{{ siteConfig.site.description }}</DrawerDescription>
 
-                    <!-- 抽屉顶部右上角小语言切换器 -->
+                    <!-- Mobile drawer compact language switcher -->
                     <div class="flex items-center justify-end px-5 pt-3 pb-1">
                         <div v-if="isMultiLocale" class="inline-flex items-center rounded-full border border-border/70 bg-muted/40 p-0.5">
                             <button

@@ -10,12 +10,12 @@ import App from './App.vue'
 import Analytics from 'analytics';
 import googleAnalytics from '@analytics/google-analytics';
 
-// 创建 Vue 实例
+// Initialize theme preferences and Vue app instance
 applyThemePreferences();
 const app = createApp(App);
 const pinia = createPinia();
 
-// 注册 Pinia
+// Register Pinia store
 app.use(pinia);
 const store = useMainStore(pinia); 
 applySiteMetadata(store.currentLocale);
@@ -34,7 +34,7 @@ if (currentConfig.analytics.enabled && currentConfig.analytics.provider === 'goo
     analytics.page();
 }
 
-// 监听窗口大小变化
+// Track viewport size changes for responsive layout
 function handleResize() {
     store.setIsMobile(window.innerWidth < 768 ? true : false);
 }
