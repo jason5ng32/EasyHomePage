@@ -36,17 +36,18 @@ const escapeHtml = (value = '') => {
 };
 
 const getSiteConfig = () => {
-  const enConfigPath = path.resolve(__dirname, 'site/en/config.md');
+  const rootDir = import.meta.dirname;
+  const enConfigPath = path.resolve(rootDir, 'site/en/config.md');
   if (fs.existsSync(enConfigPath)) {
     return matter(fs.readFileSync(enConfigPath, 'utf8')).data || {};
   }
 
-  const zhConfigPath = path.resolve(__dirname, 'site/zh-CN/config.md');
+  const zhConfigPath = path.resolve(rootDir, 'site/zh-CN/config.md');
   if (fs.existsSync(zhConfigPath)) {
     return matter(fs.readFileSync(zhConfigPath, 'utf8')).data || {};
   }
 
-  const legacyConfigPath = path.resolve(__dirname, 'site/config.md');
+  const legacyConfigPath = path.resolve(rootDir, 'site/config.md');
   if (fs.existsSync(legacyConfigPath)) {
     return matter(fs.readFileSync(legacyConfigPath, 'utf8')).data || {};
   }
@@ -91,7 +92,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   build: {
